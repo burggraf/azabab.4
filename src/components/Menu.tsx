@@ -1,6 +1,6 @@
 import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote } from '@ionic/react'
 import { Login, ResetPassword } from 'ionic-react-supabase-login';
-import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons'
+import { mailOutline, mailSharp } from 'ionicons/icons'
 import { useLocation } from 'react-router-dom'
 
 import './Menu.css'
