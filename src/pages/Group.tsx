@@ -4,7 +4,7 @@ import './Group.css';
 
 const Group: React.FC = () => {
 	const { id } = useParams<{ id: string }>()
-    
+    console.log('id', id);
   return (
     <IonPage>
       <IonHeader>
