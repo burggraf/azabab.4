@@ -51,7 +51,7 @@ const Group: React.FC = () => {
 		return () => {
 			SupabaseAuthService.unsubscribeUser(userSubscription)
 		}
-	}, [])
+	}, [id])
 
   console.log('user', user)
 
