@@ -18,10 +18,28 @@ export default class SupabaseDataService {
   }
 
   public connect = async () => {
+      if (this.isConnected()) { return; }
       supabase = await createClient(
         process.env.REACT_APP_SUPABASE_URL || '', 
         process.env.REACT_APP_SUPABASE_KEY || '');
   }
 
+  public getGroup = async (id: string) => {
+    console.log('getGroup', id);
+    console.log('supabase', supabase);
+    const { data, error } = await supabase
+    .from('group')
+    .select('*')
+    .eq('id', id)
+    .limit(1)
+    .single();
+    return { data, error };
+  }
+  public saveGroup = async (group: any) => {
+    const { data, error } = await supabase
+    .from('group')
+    .upsert(group);
+    return { data, error };
+  }
 
 }
