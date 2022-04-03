@@ -28,7 +28,7 @@ const Group: React.FC = () => {
 
   const [ user, setUser ] = useState<any>(null);
   const [ group, setGroup ] = useState<any>(null);
-  let { id } = useParams<{ id: string }>()
+  let { id } = useParams<{ id: string }>();
   console.log('id', id)
 
   const loadGroup = async (id: string) => {
@@ -47,8 +47,6 @@ const Group: React.FC = () => {
 		const userSubscription = SupabaseAuthService.subscribeUser(setUser)
     if (id) {
       loadGroup(id);
-    } else {
-      id = utilityFunctionsService.uuidv4();
     }
 		return () => {
 			SupabaseAuthService.unsubscribeUser(userSubscription)
@@ -59,6 +57,11 @@ const Group: React.FC = () => {
 
   const save = async () => {
     console.log('saveGroup', group)
+    if (!id) {
+      id = utilityFunctionsService.uuidv4();
+    } else {
+      group.updated_at = 'NOW()';
+    }
     const { data, error } = await supabaseDataService.saveGroup(group);
     if (error) {
       console.error('error saving group', error)
