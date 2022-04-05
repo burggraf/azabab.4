@@ -23,21 +23,6 @@ const Groups: React.FC = () => {
 	const history = useHistory()
 	const [user, setUser] = useState<any>(null)
 	const [groups, setGroups] = useState<any[]>([])
-	const loadGroups = async (user_id: string) => {
-		console.log('***** LOADGROUPS *****')
-		if (!supabaseDataService.isConnected()) {
-			await supabaseDataService.connect() // wait for db connection
-		}
-		supabaseDataService
-			.getGroups(user.id)
-			.then((groups_data: any) => {
-				console.log('got data', groups_data)
-				setGroups(groups_data?.data! || [])
-			})
-			.catch((err: any) => {
-				console.log('error getting groups', err)
-			})
-	}
 	useEffect(() => {
 		console.log('*** Groups: useEffect [] ***')
 		const subscription = SupabaseAuthService.user.subscribe(setUser)
@@ -48,6 +33,21 @@ const Groups: React.FC = () => {
 
 	useEffect(() => {
 		console.log('*** Groups: useEffect [user] ***', user)
+		const loadGroups = async (user_id: string) => {
+			console.log('***** LOADGROUPS *****')
+			if (!supabaseDataService.isConnected()) {
+				await supabaseDataService.connect() // wait for db connection
+			}
+			supabaseDataService
+				.getGroups(user.id)
+				.then((groups_data: any) => {
+					console.log('got data', groups_data)
+					setGroups(groups_data?.data! || [])
+				})
+				.catch((err: any) => {
+					console.log('error getting groups', err)
+				})
+		}	
 		if (user) {
 			loadGroups(user.id)
 		} else {

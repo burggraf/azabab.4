@@ -1,37 +1,26 @@
-import {
-  IonBackButton,
-  IonButton,
-	IonButtons,
-	IonContent,
-	IonHeader,
-	IonIcon,
-	IonInput,
-	IonItem,
-	IonLabel,
-	IonList,
-	IonMenuButton,
-	IonPage,
-	IonTitle,
-	IonToolbar,
-  useIonToast,
-} from '@ionic/react'
-import { useHistory, useParams } from 'react-router'
-import './Group.css'
+import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar, useIonToast } from '@ionic/react'
 import { SupabaseAuthService } from 'ionic-react-supabase-login'
-import { useEffect, useState } from 'react'
-import SupabaseDataService from '../services/supabase.data.service'
 import { checkmarkOutline } from 'ionicons/icons'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
+
+import SupabaseDataService from '../services/supabase.data.service'
 import UtilityFunctionsService from '../services/utility.functions.service'
+
+import './Group.css'
 
 const supabaseDataService = SupabaseDataService.getInstance()
 const utilityFunctionsService = UtilityFunctionsService.getInstance()
 
 const Group: React.FC = () => {
-  const history = useHistory();
+  //const history = useHistory();
   const [ user, setUser ] = useState<any>(null);
   const [ group, setGroup ] = useState<any>(null);
-  let { id } = useParams<{ id: string }>();
-  console.log('id', id)
+  const [ initialized, setInitialized ] = useState<boolean>(false);
+
+  let { id } = useParams<{ id: string; }>();
+  
+  console.log('id', id);
 
   const [present, dismiss] = useIonToast();
   const toast = (message: string, color: string = 'danger') => {
@@ -44,34 +33,38 @@ const Group: React.FC = () => {
         })
   }
 
-
-  const loadGroup = async (id: string) => {
-    if (!supabaseDataService.isConnected()) {
-      await supabaseDataService.connect(); // wait for db connection
-    }
-    supabaseDataService.getGroup(id).then((group: any) => {
-      console.log('got group', group.data)
-      setGroup(group.data)
-    }).catch((err: any) => {
-      console.log('error getting group', err)
-    })
-
-  }
   useEffect(() => {
-    console.log('*** Group: useEffect [] *** id', id)
-    const subscription = SupabaseAuthService.user.subscribe(setUser);  
+    if (initialized) {
+      console.log('already initialized');
+      return;
+    }
+    const loadGroup = async (id: string) => {
+      if (!supabaseDataService.isConnected()) {
+        await supabaseDataService.connect(); // wait for db connection
+      }
+      supabaseDataService.getGroup(id).then((group: any) => {
+        console.log('got group', group.data)
+        setGroup(group.data)
+      }).catch((err: any) => {
+        console.log('error getting group', err)
+      })
+  
+    }  
+    console.log('*** Group: useEffect []')
+    const subscription = SupabaseAuthService.user.subscribe(setUser);
     if (!id) {
-      id = utilityFunctionsService.uuidv4();
-      console.log('id is now');
-      setGroup({ ...group, id: id });
+      setGroup({ ...group, id: utilityFunctionsService.uuidv4() });
     } else {
       loadGroup(id);
-    }    
+    }   
+    setInitialized(true);     
     return () => {
       subscription.unsubscribe();
-    }
-    
-  }, []);
+    }    
+  }, [group, id, initialized]); 
+
+
+
 
   useEffect(() => {
     console.log('*** Group: useEffect [user] ***', user);
