@@ -47,8 +47,7 @@ const Group: React.FC = () => {
         setGroup(group.data)
       }).catch((err: any) => {
         console.log('error getting group', err)
-      })
-  
+      })  
     }  
     console.log('*** Group: useEffect []')
     const subscription = SupabaseAuthService.user.subscribe(setUser);
@@ -118,6 +117,15 @@ const Group: React.FC = () => {
 							placeholder={'Name'}
 							onIonChange={(e: any) => setGroup({ ...group, name: e.detail.value! })}
 							value={group?.name!}
+							class='inputBox'></IonInput>
+					</IonItem>
+					<IonItem lines="none">
+						<IonLabel slot='start' class="itemLabel">Description</IonLabel>
+						<IonInput
+							type='text'
+							placeholder={'Description'}
+							onIonChange={(e: any) => setGroup({ ...group, description: e.detail.value! })}
+							value={group?.description!}
 							class='inputBox'></IonInput>
 					</IonItem>
         </IonList>

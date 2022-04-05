@@ -1,6 +1,10 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
-
+ion-input {
+  border: 1px solid;
+  border-color: var(--ion-color-medium);
+  border-radius: 5px;
+}
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
