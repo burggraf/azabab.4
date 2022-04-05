@@ -13,6 +13,7 @@ import {
 	IonPage,
 	IonTitle,
 	IonToolbar,
+  useIonToast,
 } from '@ionic/react'
 import { useHistory, useParams } from 'react-router'
 import './Group.css'
@@ -32,6 +33,18 @@ const Group: React.FC = () => {
   let { id } = useParams<{ id: string }>();
   console.log('id', id)
 
+  const [present, dismiss] = useIonToast();
+  const toast = (message: string, color: string = 'danger') => {
+      present({
+          color: color,
+          message: message,
+          cssClass: 'toast',
+          buttons: [{ icon: 'close', handler: () => dismiss() }],
+          duration: 3000,
+        })
+  }
+
+
   const loadGroup = async (id: string) => {
     if (!supabaseDataService.isConnected()) {
       await supabaseDataService.connect(); // wait for db connection
@@ -45,22 +58,21 @@ const Group: React.FC = () => {
 
   }
   useEffect(() => {
-    console.log('*** Group: useEffect [] ***')
+    console.log('*** Group: useEffect [] *** id', id)
     const subscription = SupabaseAuthService.user.subscribe(setUser);  
+    if (!id) {
+      id = utilityFunctionsService.uuidv4();
+      console.log('id is now');
+      setGroup({ ...group, id: id });
+    } else {
+      loadGroup(id);
+    }    
     return () => {
       subscription.unsubscribe();
     }
+    
   }, []);
 
-  useEffect(() => {
-		// const userSubscription = SupabaseAuthService.subscribeUser(setUser)
-    if (id) {
-      loadGroup(id);
-    }
-		return () => {
-			// SupabaseAuthService.unsubscribeUser(userSubscription)
-		}
-	}, [id])
   useEffect(() => {
     console.log('*** Group: useEffect [user] ***', user);
 	}, [user])
@@ -69,12 +81,11 @@ const Group: React.FC = () => {
   console.log('user', user)
 
   const save = async () => {
-    console.log('saveGroup', group)
-    if (!id) {
-      id = utilityFunctionsService.uuidv4();
-    } else {
-      group.updated_at = 'NOW()';
+    if (group.name.trim() === '') {
+      toast('Group name is required');
+      return;
     }
+    group.updated_at = 'NOW()';
     const { data, error } = await supabaseDataService.saveGroup(group);
     if (error) {
       console.error('error saving group', error)

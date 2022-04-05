@@ -1,6 +1,6 @@
 import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote } from '@ionic/react'
 import { Login, ResetPassword } from 'ionic-react-supabase-login';
-import { mailOutline, mailSharp } from 'ionicons/icons'
+import { barChartOutline, barChartSharp, peopleOutline, peopleSharp } from 'ionicons/icons'
 import { useLocation } from 'react-router-dom'
 
 import './Menu.css'
@@ -16,8 +16,14 @@ const appPages: AppPage[] = [
 	{
 		title: 'Dashboard',
 		url: '/dashboard',
-		iosIcon: mailOutline,
-		mdIcon: mailSharp,
+		iosIcon: barChartOutline,
+		mdIcon: barChartSharp,
+	},
+	{
+		title: 'Groups',
+		url: '/groups',
+		iosIcon: peopleOutline,
+		mdIcon: peopleSharp,
 	},
 ]
 
