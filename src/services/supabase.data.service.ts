@@ -7,6 +7,9 @@ export default class SupabaseDataService {
 
 	static getInstance() {
 		if (this.myInstance === null) {
+      console.log('********************************************');
+      console.log('Creating new instance of SupabaseDataService');
+      console.log('********************************************');
 		  this.myInstance = new this();
       this.myInstance.connect();
 		}
@@ -28,7 +31,7 @@ export default class SupabaseDataService {
     console.log('getGroup', id);
     console.log('supabase', supabase);
     const { data, error } = await supabase
-    .from('group')
+    .from('groups')
     .select('*')
     .eq('id', id)
     .limit(1)
@@ -37,9 +40,23 @@ export default class SupabaseDataService {
   }
   public saveGroup = async (group: any) => {
     const { data, error } = await supabase
-    .from('group')
+    .from('groups')
     .upsert(group);
     return { data, error };
+  }
+  public getGroups = async (user_id: string) => {
+    const { data, error } = await supabase
+    .from('groups_access')
+    .select('groups(*)')
+    .eq('user_id', user_id);
+    let groups;     
+    if (data && data.length > 0) {
+      groups = [];
+      for (let i=0; i<data.length; i++) {
+        groups.push(data[i].groups);
+      }
+    }
+    return { data: groups, error };
   }
 
 }

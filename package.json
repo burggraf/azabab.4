@@ -20,7 +20,7 @@
     "@types/react-dom": "^16.9.10",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
-    "ionic-react-supabase-login": "^1.0.43",
+    "ionic-react-supabase-login": "^1.0.44",
     "ionicons": "^6.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

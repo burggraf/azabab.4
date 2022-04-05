@@ -1,4 +1,5 @@
 import {
+  IonBackButton,
   IonButton,
 	IonButtons,
 	IonContent,
@@ -13,7 +14,7 @@ import {
 	IonTitle,
 	IonToolbar,
 } from '@ionic/react'
-import { useParams } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import './Group.css'
 import { SupabaseAuthService } from 'ionic-react-supabase-login'
 import { useEffect, useState } from 'react'
@@ -25,7 +26,7 @@ const supabaseDataService = SupabaseDataService.getInstance()
 const utilityFunctionsService = UtilityFunctionsService.getInstance()
 
 const Group: React.FC = () => {
-
+  const history = useHistory();
   const [ user, setUser ] = useState<any>(null);
   const [ group, setGroup ] = useState<any>(null);
   let { id } = useParams<{ id: string }>();
@@ -44,14 +45,26 @@ const Group: React.FC = () => {
 
   }
   useEffect(() => {
+    console.log('*** Group: useEffect [] ***')
+    const subscription = SupabaseAuthService.user.subscribe(setUser);  
+    return () => {
+      subscription.unsubscribe();
+    }
+  }, []);
+  
+  useEffect(() => {
 		const userSubscription = SupabaseAuthService.subscribeUser(setUser)
     if (id) {
       loadGroup(id);
     }
 		return () => {
-			SupabaseAuthService.unsubscribeUser(userSubscription)
+			// SupabaseAuthService.unsubscribeUser(userSubscription)
 		}
 	}, [id])
+  useEffect(() => {
+    console.log('*** Group: useEffect [user] ***', user);
+	}, [user])
+
 
   console.log('user', user)
 
@@ -75,7 +88,7 @@ const Group: React.FC = () => {
 			<IonHeader>
 				<IonToolbar>
 					<IonButtons slot='start'>
-						<IonMenuButton />
+            <IonBackButton defaultHref='/groups' />
 					</IonButtons>
 					<IonTitle>Group</IonTitle>
 					<IonButtons slot='end'>
