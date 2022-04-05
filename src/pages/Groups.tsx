@@ -51,10 +51,6 @@ const Groups: React.FC = () => {
   });
   useIonViewDidEnter(() => {
     console.log('** useIonViewDidEnter event fired');
-    const userSubscription = SupabaseAuthService.subscribeUser(setUser);
-    console.log('userSubscription', userSubscription)
-    console.log('** user', user);
-
   });
   return (
     <IonPage>

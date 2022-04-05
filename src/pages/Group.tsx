@@ -51,9 +51,9 @@ const Group: React.FC = () => {
       subscription.unsubscribe();
     }
   }, []);
-  
+
   useEffect(() => {
-		const userSubscription = SupabaseAuthService.subscribeUser(setUser)
+		// const userSubscription = SupabaseAuthService.subscribeUser(setUser)
     if (id) {
       loadGroup(id);
     }
