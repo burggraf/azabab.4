@@ -1,22 +1,13 @@
-import {
-	IonButton,
-	IonButtons,
-	IonContent,
-	IonHeader,
-	IonIcon,
-	IonMenuButton,
-	IonPage,
-	IonTitle,
-	IonToolbar,
-	useIonViewDidEnter,
-	useIonViewWillEnter,
-} from '@ionic/react'
-import './Groups.css'
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonMenuButton, IonPage, IonTitle, IonToolbar, useIonViewDidEnter, useIonViewWillEnter } from '@ionic/react'
 import { SupabaseAuthService } from 'ionic-react-supabase-login'
-import SupabaseDataService from '../services/supabase.data.service'
+import { addOutline } from 'ionicons/icons'
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import { addOutline } from 'ionicons/icons'
+
+import SupabaseDataService from '../services/supabase.data.service'
+
+import './Groups.css'
+
 const supabaseDataService = SupabaseDataService.getInstance()
 
 const Groups: React.FC = () => {
@@ -49,6 +40,7 @@ const Groups: React.FC = () => {
 				})
 		}	
 		if (user) {
+			console.log('calling loadGroups, user is', user)
 			loadGroups(user.id)
 		} else {
 			setGroups([])
@@ -94,10 +86,10 @@ const Groups: React.FC = () => {
 				<div className='ion-padding'>
 					{groups.map((group: any) => {
 						return (
-							<div key={group.id} onClick={() => gotoGroup(group.id)}>
-								<h2>{group.name}</h2>
-								<p>{group.description}</p>
-								<p>{group.id}</p>
+							<div key={group?.id} onClick={() => gotoGroup(group?.id)}>
+								<h2>{group?.name}</h2>
+								<p>{group?.description}</p>
+								<p>{group?.id}</p>
 							</div>
 						)
 					})}
