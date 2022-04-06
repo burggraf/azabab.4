@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonMenuButton, IonPage, IonTitle, IonToolbar, useIonViewDidEnter, useIonViewWillEnter } from '@ionic/react'
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonMenuButton, IonPage, IonTitle, IonToolbar, /*useIonViewDidEnter, useIonViewWillEnter*/ } from '@ionic/react'
 import { SupabaseAuthService } from 'ionic-react-supabase-login'
 import { addOutline } from 'ionicons/icons'
 import { useEffect, useState } from 'react'
@@ -23,9 +23,7 @@ const Groups: React.FC = () => {
 	}, [])
 
 	useEffect(() => {
-		console.log('*** Groups: useEffect [user] ***', user)
 		const loadGroups = async (user_id: string) => {
-			console.log('***** LOADGROUPS *****')
 			if (!supabaseDataService.isConnected()) {
 				await supabaseDataService.connect() // wait for db connection
 			}
@@ -40,24 +38,15 @@ const Groups: React.FC = () => {
 				})
 		}	
 		if (user) {
-			console.log('calling loadGroups, user is', user)
 			loadGroups(user.id)
 		} else {
 			setGroups([])
 		}
 	}, [user])
 
-	// console.log('user', user)
 	const gotoGroup = (id: string) => {
 		history.push(`/group/${id}`)
 	}
-	useIonViewWillEnter(() => {
-		console.log('** ionViewWillEnter event fired')
-		console.log('** user', user)
-	})
-	useIonViewDidEnter(() => {
-		console.log('** useIonViewDidEnter event fired')
-	})
   const addNew = async () => {
     history.push('/group');
   }
