@@ -1,7 +1,8 @@
 import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote } from '@ionic/react'
-import { Login, ResetPassword } from 'ionic-react-supabase-login';
+import { Login, ResetPassword, User } from 'ionic-react-supabase-login';
 import { barChartOutline, barChartSharp, peopleOutline, peopleSharp } from 'ionicons/icons'
-import { useLocation } from 'react-router-dom'
+import { useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom'
 
 import './Menu.css'
 
@@ -28,7 +29,19 @@ const appPages: AppPage[] = [
 ]
 
 const Menu: React.FC = () => {
-	const location = useLocation()
+	const location = useLocation();
+	const history = useHistory();
+	const [ user, setUser ] = useState<User | null>(null);
+	const [ profile, setProfile ] = useState<any>(null);
+	const goToProfile = async () => {
+		history.replace('/profile');
+	}
+	const onSignIn = (user: any, session: any) =>{
+		window.location.reload();
+	}
+	const onSignOut = () =>{
+		window.location.reload();
+	}
 
 	return (
 		<IonMenu contentId='main' type='overlay'>
@@ -39,7 +52,15 @@ const Menu: React.FC = () => {
 					<Login
 						SUPABASE_URL={process.env.REACT_APP_SUPABASE_URL || ''}
 						SUPABASE_KEY={process.env.REACT_APP_SUPABASE_KEY || ''}
-					/>
+						// providers={['google', 'facebook', 'twitter', 'linkedin']}
+						backdropDismiss={false}
+						profileFunction={goToProfile}
+						onSignIn={onSignIn}
+						onSignOut={onSignOut}
+						profileTable={'profile'}
+						profileKey={'id'}
+						setUser={setUser}
+							/>
 					<ResetPassword
 						SUPABASE_URL={process.env.REACT_APP_SUPABASE_URL || ''}
 						SUPABASE_KEY={process.env.REACT_APP_SUPABASE_KEY || ''}

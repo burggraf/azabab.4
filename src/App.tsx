@@ -25,6 +25,7 @@ import Group from './pages/Group'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import NotFound from './pages/NotFound'
+import Profile from './pages/Profile'
 
 setupIonicReact()
 
@@ -39,6 +40,7 @@ const App: React.FC = () => {
 							<Route path='/' exact={true}>
 								<Redirect to='/dashboard' />
 							</Route>
+							<Route path="/profile" component={Profile} />
 							<Route path='/dashboard' exact={true} component={Dashboard} />
 							<Route path='/groups' exact={true} component={Groups} />
 							<Route path='/group' exact={true} component={Group} />

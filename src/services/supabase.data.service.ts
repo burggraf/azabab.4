@@ -59,4 +59,27 @@ export default class SupabaseDataService {
     return { data: groups, error };
   }
 
+  public async getProfile(id: string) {
+    if (id) {
+      const { data, error } = 
+      await supabase.from('profile')
+      .select('*')
+      .eq('id', id)
+      .limit(1)
+      .single(); // return a single object (not an array)
+      return { data, error };  
+    } else {
+      console.error('#### getProfile: no id');
+      return { data: {}, error: null };  
+    }
+  } 
+
+  public async saveProfile(profile: any) {
+    const { data, error } = 
+    await supabase.from('profile')
+    .upsert(profile);
+    return { data, error };
+  }
+
+
 }
