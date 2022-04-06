@@ -20,8 +20,6 @@ const Group: React.FC = () => {
 
   let { id } = useParams<{ id: string; }>();
   
-  console.log('id', id);
-
   const [present, dismiss] = useIonToast();
   const toast = (message: string, color: string = 'danger') => {
       present({
@@ -35,7 +33,6 @@ const Group: React.FC = () => {
 
   useEffect(() => {
     if (initialized) {
-      console.log('already initialized');
       return;
     }
     const loadGroup = async (id: string) => {
@@ -43,14 +40,12 @@ const Group: React.FC = () => {
         await supabaseDataService.connect(); // wait for db connection
       }
       supabaseDataService.getGroup(id).then((group: any) => {
-        console.log('got group', group.data)
         setGroup(group.data)
       }).catch((err: any) => {
-        console.log('error getting group', err)
+        console.error('error getting group', err)
       })  
     }  
-    console.log('*** Group: useEffect []')
-    const subscription = SupabaseAuthService.user.subscribe(setUser);
+    const userSubscription = SupabaseAuthService.user.subscribe(setUser);
     if (!id) {
       setGroup({ ...group, id: utilityFunctionsService.uuidv4() });
     } else {
@@ -58,7 +53,7 @@ const Group: React.FC = () => {
     }   
     setInitialized(true);     
     return () => {
-      subscription.unsubscribe();
+      userSubscription.unsubscribe();
     }    
   }, [group, id, initialized]); 
 
@@ -66,11 +61,12 @@ const Group: React.FC = () => {
 
 
   useEffect(() => {
-    console.log('*** Group: useEffect [user] ***', user);
+    if (user) {
+
+    }
 	}, [user])
 
 
-  console.log('user', user)
 
   const save = async () => {
     if (group.name.trim() === '') {
@@ -82,7 +78,9 @@ const Group: React.FC = () => {
     if (error) {
       console.error('error saving group', error)
     } else {
-      console.log('group saved', data);
+      if (data) {
+        // do nothing here
+      }
     }
   }
 
