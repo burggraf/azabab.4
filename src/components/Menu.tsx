@@ -53,8 +53,7 @@ const Menu: React.FC = () => {
 		}
 	  },[])
 	  useEffect(() => {
-		console.log('user', user);
-		console.log('profile', profile);
+		  if (user && profile) {}
 	}, [user, profile])
 
 	return (

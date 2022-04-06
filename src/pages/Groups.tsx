@@ -47,7 +47,7 @@ const Groups: React.FC = () => {
 		}
 	}, [user])
 
-	console.log('user', user)
+	// console.log('user', user)
 	const gotoGroup = (id: string) => {
 		history.push(`/group/${id}`)
 	}

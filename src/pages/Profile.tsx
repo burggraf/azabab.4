@@ -37,8 +37,9 @@ const Profile: React.FC = () => {
     },[])
 
 	useEffect(() => {
-		console.log('user', user)
-		console.log('profile', profile)
+		if (user && profile) {
+			// do nothing
+		}
 	}, [user, profile])
 
 	// const { name } = useParams<{ name: string; }>();
