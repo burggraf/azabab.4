@@ -24,7 +24,7 @@ const supabaseDataService = SupabaseDataService.getInstance()
 
 const Profile: React.FC = () => {
 
-    const [ user, setUser ] = useState<any>(null);
+    const [ user, setUser ] = useState<User | null>(null);
     const [ profile, setProfile ] = useState<any>(null);
     useEffect(() => {
 	  const userSubscription = SupabaseAuthService.user.subscribe(setUser);
@@ -40,7 +40,7 @@ const Profile: React.FC = () => {
 		console.log('user', user)
 		console.log('profile', profile)
 	}, [user, profile])
-	
+
 	// const { name } = useParams<{ name: string; }>();
 	const save = async () => {
 		await supabaseDataService.saveProfile(profile)

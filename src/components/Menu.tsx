@@ -1,8 +1,9 @@
 import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote } from '@ionic/react'
 import { Login, ResetPassword, User } from 'ionic-react-supabase-login';
 import { barChartOutline, barChartSharp, peopleOutline, peopleSharp } from 'ionicons/icons'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom'
+import { SupabaseAuthService } from 'ionic-react-supabase-login'
 
 import './Menu.css'
 
@@ -42,6 +43,19 @@ const Menu: React.FC = () => {
 	const onSignOut = () =>{
 		window.location.reload();
 	}
+    useEffect(() => {
+		const userSubscription = SupabaseAuthService.user.subscribe(setUser);
+		const profileSubscription = SupabaseAuthService.profile.subscribe(setProfile);
+  
+		return () => {
+			userSubscription.unsubscribe();
+			profileSubscription.unsubscribe();
+		}
+	  },[])
+	  useEffect(() => {
+		console.log('user', user);
+		console.log('profile', profile);
+	}, [user, profile])
 
 	return (
 		<IonMenu contentId='main' type='overlay'>
