@@ -46,11 +46,15 @@ const Group: React.FC = () => {
       })  
     }  
     const userSubscription = SupabaseAuthService.user.subscribe(setUser);
-    if (!id) {
-      setGroup({ ...group, id: utilityFunctionsService.uuidv4() });
-    } else {
+    if (id && id.startsWith('new-')) {
+      console.log('id is', id)
+      console.log('parent_id will be', id.substring(4))
+      setGroup({ ...group, id: utilityFunctionsService.uuidv4(), parent_id: id.substring(4) });
+    } else if (id) {
       loadGroup(id);
-    }   
+    } else {
+      setGroup({ ...group, id: utilityFunctionsService.uuidv4() });
+    }
     setInitialized(true);     
     return () => {
       userSubscription.unsubscribe();
@@ -128,6 +132,7 @@ const Group: React.FC = () => {
 					</IonItem>
         </IonList>
         </div>
+        <pre>{JSON.stringify(group, null, 2)}</pre>
 			</IonContent>
 		</IonPage>
 	)

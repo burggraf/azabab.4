@@ -64,12 +64,12 @@ const Menu: React.FC = () => {
 	  useEffect(() => {
 		  console.log('useEffect', user, profile, pages);
 		  if (lastUserID === user?.id) {
-			  return; // prevent looping
-		  }
-		  lastUserID = user?.id || null;
+			  return; // prevent looping, but looping will occur until setAppPages is finished
+		  }		  
 		  console.log('lastUserID', lastUserID);
 		  if (user && profile) {}
 		  setAppPages(pages);
+		  lastUserID = user?.id || null;
 	}, [user, profile, pages])
 
 	return (

@@ -1,6 +1,6 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonMenuButton, IonPage, IonTitle, IonToolbar, /*useIonViewDidEnter, useIonViewWillEnter*/ } from '@ionic/react'
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonMenuButton, IonNote, IonPage, IonTitle, IonToolbar } from '@ionic/react'
 import { SupabaseAuthService } from 'ionic-react-supabase-login'
-import { addOutline } from 'ionicons/icons'
+import { addCircleOutline, addOutline } from 'ionicons/icons'
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 
@@ -36,7 +36,7 @@ const Groups: React.FC = () => {
 				.catch((err: any) => {
 					console.log('error getting groups', err)
 				})
-		}	
+		}
 		if (user) {
 			loadGroups(user.id)
 		} else {
@@ -47,9 +47,13 @@ const Groups: React.FC = () => {
 	const gotoGroup = (id: string) => {
 		history.push(`/group/${id}`)
 	}
-  const addNew = async () => {
-    history.push('/group');
-  }
+	const addNew = async (parentid?: string) => {
+		if (parentid) {
+			history.push('/group/' + parentid)
+		} else {
+			history.push('/group')
+		}
+	}
 	return (
 		<IonPage>
 			<IonHeader>
@@ -58,11 +62,11 @@ const Groups: React.FC = () => {
 						<IonMenuButton />
 					</IonButtons>
 					<IonTitle>Groups</IonTitle>
-          <IonButtons slot='end'>
-							<IonButton color='primary' onClick={addNew}>
-								<IonIcon size='large' icon={addOutline}></IonIcon>
-							</IonButton>
-						</IonButtons>
+					<IonButtons slot='end'>
+						<IonButton color='primary' onClick={() => addNew()}>
+							<IonIcon size='large' icon={addCircleOutline}></IonIcon>
+						</IonButton>
+					</IonButtons>
 				</IonToolbar>
 			</IonHeader>
 
@@ -73,15 +77,21 @@ const Groups: React.FC = () => {
 					</IonToolbar>
 				</IonHeader>
 				<div className='ion-padding'>
+					<IonList>
 					{groups.map((group: any) => {
 						return (
-							<div key={group?.id} onClick={() => gotoGroup(group?.id)}>
-								<h2>{group?.name}</h2>
-								<p>{group?.description}</p>
-								<p>{group?.id}</p>
-							</div>
+							<IonItem key={group?.id} onClick={() => gotoGroup(group?.id)} lines="full">
+								<IonLabel class="ion-text-wrap">
+									{group?.name}<br/>
+									<IonNote>{group?.description}</IonNote>
+								</IonLabel>
+								<IonButton fill='clear' slot='end' color='primary' onClick={(e) => {addNew('new-' + group?.id);e.stopPropagation()}}>
+									<IonIcon size='large' icon={addOutline}></IonIcon>
+								</IonButton>
+							</IonItem>
 						)
 					})}
+					</IonList>
 				</div>
 			</IonContent>
 		</IonPage>
