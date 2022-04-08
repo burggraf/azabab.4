@@ -1,9 +1,9 @@
 import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote } from '@ionic/react'
 import { Login, ResetPassword, User } from 'ionic-react-supabase-login';
+import { SupabaseAuthService } from 'ionic-react-supabase-login'
 import { barChartOutline, barChartSharp, peopleOutline, peopleSharp } from 'ionicons/icons'
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom'
-import { SupabaseAuthService } from 'ionic-react-supabase-login'
 
 import './Menu.css'
 
@@ -11,29 +11,34 @@ interface AppPage {
 	url: string
 	iosIcon: string
 	mdIcon: string
-	title: string
+	title: string,
+	auth: boolean
 }
 
-const appPages: AppPage[] = [
-	{
-		title: 'Dashboard',
-		url: '/dashboard',
-		iosIcon: barChartOutline,
-		mdIcon: barChartSharp,
-	},
-	{
-		title: 'Groups',
-		url: '/groups',
-		iosIcon: peopleOutline,
-		mdIcon: peopleSharp,
-	},
-]
 
 const Menu: React.FC = () => {
 	const location = useLocation();
 	const history = useHistory();
 	const [ user, setUser ] = useState<User | null>(null);
 	const [ profile, setProfile ] = useState<any>(null);
+	const [ appPages, setAppPages ] = useState<AppPage[]>(
+		[
+			{
+				title: 'Dashboard',
+				url: '/dashboard',
+				iosIcon: barChartOutline,
+				mdIcon: barChartSharp,
+				auth: false
+			},
+			{
+				title: 'Groups',
+				url: '/groups',
+				iosIcon: peopleOutline,
+				mdIcon: peopleSharp,
+				auth: true
+			},
+		]
+	);
 	const goToProfile = async () => {
 		history.replace('/profile');
 	}
@@ -80,6 +85,7 @@ const Menu: React.FC = () => {
 					/>
 
 					{appPages.map((appPage, index) => {
+						if (!appPage.auth || user) {
 						return (
 							<IonMenuToggle key={index} autoHide={false}>
 								<IonItem
@@ -92,7 +98,9 @@ const Menu: React.FC = () => {
 									<IonLabel>{appPage.title}</IonLabel>
 								</IonItem>
 							</IonMenuToggle>
-						)
+						)} else {
+							return (null)						
+						}
 					})}
 				</IonList>
 
