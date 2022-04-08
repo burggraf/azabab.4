@@ -12,33 +12,33 @@ interface AppPage {
 	iosIcon: string
 	mdIcon: string
 	title: string,
-	auth: boolean
+	showIf: boolean
 }
-
 
 const Menu: React.FC = () => {
 	const location = useLocation();
 	const history = useHistory();
 	const [ user, setUser ] = useState<User | null>(null);
 	const [ profile, setProfile ] = useState<any>(null);
-	const [ appPages, setAppPages ] = useState<AppPage[]>(
-		[
-			{
-				title: 'Dashboard',
-				url: '/dashboard',
-				iosIcon: barChartOutline,
-				mdIcon: barChartSharp,
-				auth: false
-			},
-			{
-				title: 'Groups',
-				url: '/groups',
-				iosIcon: peopleOutline,
-				mdIcon: peopleSharp,
-				auth: true
-			},
-		]
-	);
+	const pages: AppPage[] = 		
+	[
+		{
+			title: 'Dashboard',
+			url: '/dashboard',
+			iosIcon: barChartOutline,
+			mdIcon: barChartSharp,
+			showIf: true
+		},
+		{
+			title: 'Groups',
+			url: '/groups',
+			iosIcon: peopleOutline,
+			mdIcon: peopleSharp,
+			showIf: user !== null
+		},
+	];
+
+	const [ appPages, setAppPages ] = useState<AppPage[]>(pages);
 	const goToProfile = async () => {
 		history.replace('/profile');
 	}
@@ -59,6 +59,7 @@ const Menu: React.FC = () => {
 	  },[])
 	  useEffect(() => {
 		  if (user && profile) {}
+		  setAppPages(pages);
 	}, [user, profile])
 
 	return (
@@ -85,7 +86,7 @@ const Menu: React.FC = () => {
 					/>
 
 					{appPages.map((appPage, index) => {
-						if (!appPage.auth || user) {
+						if (appPage.showIf) {
 						return (
 							<IonMenuToggle key={index} autoHide={false}>
 								<IonItem
