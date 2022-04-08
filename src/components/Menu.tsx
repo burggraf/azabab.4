@@ -15,6 +15,8 @@ interface AppPage {
 	showIf: boolean
 }
 
+let lastUserID: string | null = null;
+
 const Menu: React.FC = () => {
 	const location = useLocation();
 	const history = useHistory();
@@ -58,9 +60,15 @@ const Menu: React.FC = () => {
 		}
 	  },[])
 	  useEffect(() => {
+		  console.log('useEffect', user, profile, pages);
+		  if (lastUserID === user?.id) {
+			  return; // prevent looping
+		  }
+		  lastUserID = user?.id || null;
+		  console.log('lastUserID', lastUserID);
 		  if (user && profile) {}
 		  setAppPages(pages);
-	}, [user, profile])
+	}, [user, profile, pages])
 
 	return (
 		<IonMenu contentId='main' type='overlay'>
