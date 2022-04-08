@@ -5,6 +5,8 @@ import { barChartOutline, barChartSharp, peopleOutline, peopleSharp } from 'ioni
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom'
 
+import info from '../../package.json';
+
 import './Menu.css'
 
 interface AppPage {
@@ -75,7 +77,7 @@ const Menu: React.FC = () => {
 			<IonContent>
 				<IonList id='inbox-list'>
 					<IonListHeader>Azabab</IonListHeader>
-					<IonNote>tag line here</IonNote>
+					<IonNote>tag line here<br/>v{info?.version}</IonNote>
 					<Login
 						SUPABASE_URL={process.env.REACT_APP_SUPABASE_URL || ''}
 						SUPABASE_KEY={process.env.REACT_APP_SUPABASE_KEY || ''}
