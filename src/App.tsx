@@ -27,7 +27,11 @@ import Terms from './pages/Terms'
 import NotFound from './pages/NotFound'
 import Profile from './pages/Profile'
 
-setupIonicReact()
+setupIonicReact({
+	// rippleEffect: false,
+	mode: 'ios',
+  });
+
 
 const App: React.FC = () => {
 	return (
