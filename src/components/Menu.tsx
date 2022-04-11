@@ -2,7 +2,7 @@ import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu
 import { Login, ResetPassword, User } from 'ionic-react-supabase-login';
 import { SupabaseAuthService } from 'ionic-react-supabase-login'
 import { barChartOutline, barChartSharp, peopleOutline, peopleSharp } from 'ionicons/icons'
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom'
 
 import info from '../../package.json';
@@ -24,7 +24,8 @@ const Menu: React.FC = () => {
 	const history = useHistory();
 	const [ user, setUser ] = useState<User | null>(null);
 	const [ profile, setProfile ] = useState<any>(null);
-	const pages: AppPage[] = 		
+
+	const pages = useMemo(() => 
 	[
 		{
 			title: 'Dashboard',
@@ -40,7 +41,7 @@ const Menu: React.FC = () => {
 			mdIcon: peopleSharp,
 			showIf: user !== null
 		},
-	];
+	], [user]);
 
 	const [ appPages, setAppPages ] = useState<AppPage[]>(pages);
 	const goToProfile = async () => {
