@@ -81,5 +81,10 @@ export default class SupabaseDataService {
     return { data, error };
   }
 
+  public async groups_get_tree_for_user(user_id: string) {
+    const { data, error } =
+    await supabase.rpc('groups_get_tree_for_user', {target_user_id: user_id});
+    return { data, error };
+  }
 
 }
