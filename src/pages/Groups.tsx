@@ -97,7 +97,12 @@ const Groups: React.FC = () => {
 										Array(group?.level).fill(0).map((_, index) => <IonIcon key={Math.random()} />)
 									}									
 									{group?.name}<br/>
-									<IonNote>{group?.description}</IonNote>
+									<IonNote>
+										{ // repeat indent based on group.level
+											Array(group?.level).fill(0).map((_, index) => <IonIcon key={Math.random()} />)
+										}									
+										{group?.description}
+									</IonNote>
 								</IonLabel>
 								<IonButton fill='clear' slot='end' color='primary' onClick={(e) => {addNew('new-' + group?.id);e.stopPropagation()}}>
 									<IonIcon size='large' icon={addOutline}></IonIcon>
