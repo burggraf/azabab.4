@@ -34,6 +34,7 @@ const Group: React.FC = () => {
 	const [presentAlert] = useIonAlert()
 	const [user, setUser] = useState<any>(null)
 	const [group, setGroup] = useState<any>(null)
+  const [childGroupCount, setChildGroupCount] = useState<number>(-1)
 	const [initialized, setInitialized] = useState<boolean>(false)
 
 	let { id } = useParams<{ id: string }>()
@@ -64,8 +65,16 @@ const Group: React.FC = () => {
 				})
 				.catch((err: any) => {
 					console.error('error getting group', err)
-				})
-		}
+				});
+
+      const count = await supabaseDataService.hasChildGroups(id);
+      if (typeof count === 'number') {
+        setChildGroupCount(count);
+      } else {
+        setChildGroupCount(-1);
+      }
+      
+    }
 		const userSubscription = SupabaseAuthService.user.subscribe(setUser)
 		if (id && id.startsWith('new-')) {
 			console.log('id is', id)
@@ -185,13 +194,15 @@ const Group: React.FC = () => {
 				</div>
 				<pre>{JSON.stringify(group, null, 2)}</pre>
 			</IonContent>
-			<IonFooter>
-				<div className='ion-padding'>
-					<IonButton expand='block' color='danger' onClick={deleteGroup}>
-						Delete Group
-					</IonButton>
-				</div>
-			</IonFooter>
+      { childGroupCount === 0 &&
+        <IonFooter>
+        <div className='ion-padding'>
+          <IonButton expand='block' color='danger' onClick={deleteGroup}>
+            Delete Group
+          </IonButton>
+        </div>
+      </IonFooter>
+    }
 		</IonPage>
 	)
 }

@@ -1,10 +1,18 @@
 --DROP FUNCTION groups_delete;
+
 CREATE OR REPLACE FUNCTION groups_delete (target uuid)
-RETURNS void as
+RETURNS TEXT as
 $$
-   DELETE FROM groups_access where group_id = target;
-   DELETE FROM groups where id = target;
+BEGIN
+
+   IF (SELECT count(*) from groups where parent_id = target) > 0 THEN
+      RAISE EXCEPTION 'children exist, cannot delete'; 
+   END IF;
+   DELETE FROM groups_access WHERE group_id = target;
+   DELETE FROM groups WHERE id = target;
+   RETURN 'OK';
+END
 $$
-language SQL;
+language PLPGSQL;
 
 

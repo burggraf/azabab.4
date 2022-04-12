@@ -63,6 +63,20 @@ export default class SupabaseDataService {
     }
     return { data: groups, error };
   }
+  public hasChildGroups = async (id: string) => {
+    console.log('hasChildGroups looing for parent_id', id);
+    const { error, count } = await supabase
+    .from('groups')
+    .select('id', { count: 'exact', head: true })
+    .eq('parent_id', id);
+    console.log('hasChildGroups, data, error, count', error, count);
+    if (error) {
+      console.error('hasChildGroups error', error);
+      return { error };
+    } else {
+      return count;
+    }
+  }
 
   public async getProfile(id: string) {
     if (id) {
