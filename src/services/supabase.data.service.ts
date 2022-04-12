@@ -44,6 +44,11 @@ export default class SupabaseDataService {
     .upsert(group);
     return { data, error };
   }
+  public deleteGroup = async (id: string) => {
+    const { data, error } = await supabase
+    .rpc('groups_delete', {"target": id});
+    return { data, error };
+  }
   public getGroups = async (user_id: string) => {
     const { data, error } = await supabase
     .from('groups_access')
