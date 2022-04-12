@@ -19,7 +19,7 @@ import {
 import { SupabaseAuthService } from 'ionic-react-supabase-login'
 import { checkmarkOutline } from 'ionicons/icons'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 
 import SupabaseDataService from '../services/supabase.data.service'
 import UtilityFunctionsService from '../services/utility.functions.service'
@@ -30,7 +30,7 @@ const supabaseDataService = SupabaseDataService.getInstance()
 const utilityFunctionsService = UtilityFunctionsService.getInstance()
 
 const Group: React.FC = () => {
-	//const history = useHistory();
+	const history = useHistory();
 	const [presentAlert] = useIonAlert()
 	const [user, setUser] = useState<any>(null)
 	const [group, setGroup] = useState<any>(null)
@@ -108,6 +108,7 @@ const Group: React.FC = () => {
 		} else {
 			if (data) {
 				// do nothing here
+        history.goBack()
 			}
 		}
 	}
@@ -133,6 +134,7 @@ const Group: React.FC = () => {
 							} else {
 								if (data) {
 									// do nothing here
+                  history.goBack()
 								}
 							}
 						},
