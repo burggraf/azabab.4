@@ -105,5 +105,47 @@ export default class SupabaseDataService {
     await supabase.rpc('groups_get_tree_for_user', {target_user_id: user_id});
     return { data, error };
   }
+  public async getInvitations(group_id: string) {
+    console.log('data service getInvitations', group_id);
+    const { data, error } = await supabase
+    .from('invitations')
+    .select('*')
+    .eq('group_id', group_id)
+    //.eq('result', null);
+    return { data, error };
+  }
+  public async inviteUsersToGroup(current_user_id: string, group_id: string, userEmails: string[], inviteAccess: string) {
+    const data = [];
+    for (let i=0; i<userEmails.length; i++) {
+      const invite: any = {group_id, email: userEmails[i], access: inviteAccess, invited_by: current_user_id};
+      const { data: lookupData, error: lookupError } = await supabase
+      .from('invitations')
+      .select('id')
+      .eq('group_id', group_id)
+      .eq('email', userEmails[i])
+      .limit(1);
+      console.log('lookupData, lookupError', lookupData, lookupError);
+      if (lookupError) {
+        console.error('inviteUsersToGroup lookup error', lookupError);
+        return { error: lookupError };
+      }
+      if (lookupData && lookupData.length && lookupData[0].id) {
+        invite.id = lookupData[0].id;
+      }
+      const { data: saveData, error: saveError } = await supabase
+      .from('invitations')
+      .upsert(invite);
+      if (saveError) {
+        console.error('inviteUsersToGroup save error', saveError);
+        return { error: saveError };
+      } else {
+        data.push(saveData[0]);
+      }
+      console.log('inviteUsersToGroup saveData, saveError', saveData, saveError);
+
+
+    }
+    return { data, error: null };
+  }
 
 }
