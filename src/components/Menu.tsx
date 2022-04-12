@@ -4,10 +4,12 @@ import { SupabaseAuthService } from 'ionic-react-supabase-login'
 import { barChartOutline, barChartSharp, peopleOutline, peopleSharp } from 'ionicons/icons'
 import { useEffect, useMemo, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom'
+import SupabaseDataService from '../services/supabase.data.service'
 
 import info from '../../package.json';
 
 import './Menu.css'
+const supabaseDataService = SupabaseDataService.getInstance()
 
 interface AppPage {
 	url: string
@@ -24,7 +26,7 @@ const Menu: React.FC = () => {
 	const history = useHistory();
 	const [ user, setUser ] = useState<User | null>(null);
 	const [ profile, setProfile ] = useState<any>(null);
-
+	const [ invites, setInvites ] = useState<any[]>([]);
 	const pages = useMemo(() => 
 	[
 		{
@@ -71,8 +73,26 @@ const Menu: React.FC = () => {
 		  if (user && profile) {}
 		  setAppPages(pages);
 		  lastUserID = user?.id || null;
+		  if (user?.email) {
+			getMyInvitations(user?.email);
+		  } else {
+			  setInvites([]);
+		  }
 	}, [user, profile, pages])
 
+	const getMyInvitations = async (user_id: string) => {
+		if (!supabaseDataService.isConnected()) {
+		  await supabaseDataService.connect() // wait for db connection
+		}
+		const { data, error } = await supabaseDataService.getMyInvitations(user_id);
+		if (error) {
+			console.error('error getting my invitations', error)
+		} else {
+			console.log('getMyInvitations', data)
+			setInvites(data);
+		}
+	  }
+	
 	return (
 		<IonMenu contentId='main' type='overlay'>
 			<IonContent>
@@ -115,7 +135,9 @@ const Menu: React.FC = () => {
 						}
 					})}
 				</IonList>
-
+				<pre>
+					{ JSON.stringify(invites, null, 2) }
+				</pre>
 			</IonContent>
 		</IonMenu>
 	)

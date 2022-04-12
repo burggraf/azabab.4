@@ -114,6 +114,13 @@ export default class SupabaseDataService {
     //.eq('result', null);
     return { data, error };
   }
+  public async getMyInvitations(email: string) {
+    const { data, error } = await supabase
+    .from('invitations')
+    .select('*')
+    .eq('email', email);
+    return { data, error };
+  }
   public async inviteUsersToGroup(current_user_id: string, group_id: string, userEmails: string[], inviteAccess: string) {
     const data = [];
     for (let i=0; i<userEmails.length; i++) {
