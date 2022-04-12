@@ -2,8 +2,10 @@ import {
 	IonBackButton,
 	IonButton,
 	IonButtons,
+	IonCol,
 	IonContent,
 	IonFooter,
+	IonGrid,
 	IonHeader,
 	IonIcon,
 	IonInput,
@@ -13,6 +15,7 @@ import {
 	IonList,
 	IonListHeader,
 	IonPage,
+	IonRow,
 	IonSelect,
 	IonSelectOption,
 	IonTextarea,
@@ -246,6 +249,8 @@ const Group: React.FC = () => {
 				</div>
 				{/* <pre>{JSON.stringify(group, null, 2)}</pre> */}
         <div className='ion-padding'>
+        <div className='ion-padding' style={{'border': '1px solid'}}>
+        <div className='ion-padding'>
         
         <IonList>
 
@@ -272,10 +277,29 @@ const Group: React.FC = () => {
           <IonButton expand='block' color='medium' onClick={doInviteUsers}>
             Invite Users
           </IonButton>
+        <IonGrid>
+              <IonRow key={'invites_header'}>
+                <IonCol><b>Email</b></IonCol>
+                <IonCol><b>Created At</b></IonCol>
+                <IonCol><b>Result</b></IonCol>
+              </IonRow>
+          { invites.map((invite: any) => {
+            const created_at = new Date(invite.created_at);
+            return (
+              <IonRow key={invite.id}>
+                <IonCol>{invite.email}</IonCol>
+                <IonCol>{created_at.toLocaleString()}</IonCol>
+                <IonCol>{invite.result || 'pending'}</IonCol>
+              </IonRow>
+            )
+          })}
+        </IonGrid>
+          {/* <pre>
+            {JSON.stringify(invites, null, 2)}
+          </pre> */}
         </div>
-        <pre>
-          {JSON.stringify(invites, null, 2)}
-        </pre>
+        </div>
+        </div>
 			</IonContent>
       { childGroupCount === 0 &&
         <IonFooter>
