@@ -45,26 +45,24 @@ const Dashboard: React.FC = () => {
 	}
 	const acceptInvite = async (invite_id: string) => { 		
 		console.log('acceptInvite', invite_id) 
-		const user_id: any = user?.id;
 		const { data, error } = await supabaseDataService.invitations_accept(invite_id)
 		if (error) {
 			console.error('error accepting invite', error)
 		} else {
 			console.log('invitations_accept data', data)
-			// reload page
-			window.location.reload()
+			window.location.reload();
+			// getMyInvitations((user?.id || '' as string));
 		}
 	}
 	const rejectInvite = async (invite_id: string) => { 		
 		console.log('rejectInvite', invite_id) 
-		const user_id: any = user?.id;
 		const { data, error } = await supabaseDataService.invitations_reject(invite_id)
 		if (error) {
 			console.error('error rejecting invite', error)
 		} else {
 			console.log('invitations_reject data', data)
-			// reload page
-			window.location.reload()
+			window.location.reload();
+			// getMyInvitations((user?.id || '' as string));
 		}
 	}
   	const getGroupInfo = async (group_id: string) => { console.log('getGroupInfo', group_id) }
