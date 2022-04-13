@@ -1,6 +1,5 @@
 import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote } from '@ionic/react'
-import { Login, ResetPassword, User } from 'ionic-react-supabase-login';
-import { SupabaseAuthService } from 'ionic-react-supabase-login'
+import { Login, ResetPassword, User, SupabaseAuthService} from 'ionic-react-supabase-login';
 import { barChartOutline, barChartSharp, peopleOutline, peopleSharp } from 'ionicons/icons'
 import { useEffect, useMemo, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom'
