@@ -40,8 +40,8 @@ const Dashboard: React.FC = () => {
 		} else {
 			setInvites([])
 		}
-		console.log('useEffect user, profile, invites', user, profile, invites)
 	}, [user])
+  console.log('user, profile, invites', user, profile, invites)
 
 	const getMyInvitations = async (user_id: string) => {
 		if (!supabaseDataService.isConnected()) {

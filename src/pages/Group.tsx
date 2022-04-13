@@ -13,7 +13,6 @@ import {
 	IonItemDivider,
 	IonLabel,
 	IonList,
-	IonListHeader,
 	IonPage,
 	IonRow,
 	IonSelect,
@@ -26,7 +25,7 @@ import {
 } from '@ionic/react'
 import { SupabaseAuthService } from 'ionic-react-supabase-login'
 import { checkmarkOutline } from 'ionicons/icons'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router'
 
 import SupabaseDataService from '../services/supabase.data.service'
@@ -38,14 +37,14 @@ const supabaseDataService = SupabaseDataService.getInstance()
 const utilityFunctionsService = UtilityFunctionsService.getInstance()
 
 const Group: React.FC = () => {
-	const history = useHistory();
+	const history = useHistory()
 	const [presentAlert] = useIonAlert()
 	const [user, setUser] = useState<any>(null)
 	const [group, setGroup] = useState<any>(null)
-  const [inviteUsers, setInviteUsers] = useState<string>('')
-  const [invites, setInvites] = useState<any[]>([])
-  const [inviteAccess, setInviteAccess] = useState<string>('user')
-  const [childGroupCount, setChildGroupCount] = useState<number>(-1)
+	const [inviteUsers, setInviteUsers] = useState<string>('')
+	const [invites, setInvites] = useState<any[]>([])
+	const [inviteAccess, setInviteAccess] = useState<string>('user')
+	const [childGroupCount, setChildGroupCount] = useState<number>(-1)
 	const [initialized, setInitialized] = useState<boolean>(false)
 
 	let { id } = useParams<{ id: string }>()
@@ -60,6 +59,21 @@ const Group: React.FC = () => {
 			duration: 3000,
 		})
 	}
+
+	const getInvitations = useCallback(async () => {
+		if (!supabaseDataService.isConnected()) {
+			await supabaseDataService.connect() // wait for db connection
+		}
+		if (id && !id.startsWith('new-')) {
+			const { data, error } = await supabaseDataService.getInvitations(id)
+			if (error) {
+				console.error('error getting invitations', error)
+			} else {
+				console.log('getInvitations', data)
+				setInvites(data)
+			}
+		}
+	}, [id])
 
 	useEffect(() => {
 		if (initialized) {
@@ -76,16 +90,15 @@ const Group: React.FC = () => {
 				})
 				.catch((err: any) => {
 					console.error('error getting group', err)
-				});
+				})
 
-      const count = await supabaseDataService.hasChildGroups(id);
-      if (typeof count === 'number') {
-        setChildGroupCount(count);
-      } else {
-        setChildGroupCount(-1);
-      }
-      
-    }
+			const count = await supabaseDataService.hasChildGroups(id)
+			if (typeof count === 'number') {
+				setChildGroupCount(count)
+			} else {
+				setChildGroupCount(-1)
+			}
+		}
 		const userSubscription = SupabaseAuthService.user.subscribe(setUser)
 		if (id && id.startsWith('new-')) {
 			console.log('id is', id)
@@ -93,7 +106,7 @@ const Group: React.FC = () => {
 			setGroup({ ...group, id: utilityFunctionsService.uuidv4(), parent_id: id.substring(4) })
 		} else if (id) {
 			loadGroup(id)
-      getInvitations();
+			getInvitations()
 		} else {
 			setGroup({ ...group, id: utilityFunctionsService.uuidv4() })
 		}
@@ -101,7 +114,7 @@ const Group: React.FC = () => {
 		return () => {
 			userSubscription.unsubscribe()
 		}
-	}, [group, id, initialized])
+	}, [group, id, initialized, getInvitations])
 
 	useEffect(() => {
 		if (user) {
@@ -120,52 +133,43 @@ const Group: React.FC = () => {
 		} else {
 			if (data) {
 				// do nothing here
-        history.goBack()
+				history.goBack()
 			}
 		}
 	}
-  const getInvitations = async () => {
-    if (!supabaseDataService.isConnected()) {
-      await supabaseDataService.connect() // wait for db connection
-    }
-    if (id && !id.startsWith('new-')) {
-      const { data, error } = await supabaseDataService.getInvitations(id);
-      if (error) {
-        console.error('error getting invitations', error)
-      } else {
-        console.log('getInvitations', data)
-        setInvites(data);
-      }
-    }
-  }
-  const doInviteUsers = async () => {
-    if (!user.id){
-      toast('You must be logged in to invite users')
-      return
-    }
-    if (inviteUsers.trim() === '') {
-      toast('Please enter a user or users to invite')
-      return
-    }
-    const users = inviteUsers.split(',')
-    const userEmails = users.map((email: string) => {
-      return email.trim()
-    })
-    if (userEmails.length > 10) {
-      toast('Please enter no more than 10 users')
-      return
-    }
-    const { data, error } = await supabaseDataService.inviteUsersToGroup(user.id, group.id, userEmails, inviteAccess)
-    if (error) {
-      console.error('error inviting users', error)
-      toast('Error inviting users', error.message);
-    } else {
-      if (data) {
-        setInviteUsers('');
-        getInvitations();
-      }
-    }
-  }
+	const doInviteUsers = async () => {
+		if (!user.id) {
+			toast('You must be logged in to invite users')
+			return
+		}
+		if (inviteUsers.trim() === '') {
+			toast('Please enter a user or users to invite')
+			return
+		}
+		const users = inviteUsers.split(',')
+		const userEmails = users.map((email: string) => {
+			return email.trim()
+		})
+		if (userEmails.length > 10) {
+			toast('Please enter no more than 10 users')
+			return
+		}
+		const { data, error } = await supabaseDataService.inviteUsersToGroup(
+			user.id,
+			group.id,
+			userEmails,
+			inviteAccess
+		)
+		if (error) {
+			console.error('error inviting users', error)
+			toast('Error inviting users', error.message)
+		} else {
+			if (data) {
+				setInviteUsers('')
+				getInvitations()
+			}
+		}
+	}
 	const deleteGroup = async () => {
 		if (group.id) {
 			presentAlert({
@@ -177,17 +181,18 @@ const Group: React.FC = () => {
 					{
 						text: 'Delete',
 						handler: async (d) => {
-							const { data, error } = await supabaseDataService.deleteGroup(group.id);
-              if (error) { console.error('error deleting group', error) }
-              else {
-                console.log('group deleted, returned', data);
-              }
+							const { data, error } = await supabaseDataService.deleteGroup(group.id)
+							if (error) {
+								console.error('error deleting group', error)
+							} else {
+								console.log('group deleted, returned', data)
+							}
 							if (error) {
 								console.error('error deleting group', error)
 							} else {
 								if (data) {
 									// do nothing here
-                  history.goBack()
+									history.goBack()
 								}
 							}
 						},
@@ -248,68 +253,72 @@ const Group: React.FC = () => {
 					</IonList>
 				</div>
 				{/* <pre>{JSON.stringify(group, null, 2)}</pre> */}
-        <div className='ion-padding'>
-        <div className='ion-padding' style={{'border': '1px solid'}}>
-        <div className='ion-padding'>
-        
-        <IonList>
-
-          <IonItemDivider>Invite Users</IonItemDivider>
-          <IonItem>
-            <IonTextarea 
-              placeholder="email1@host.com,email2@host.com" 
-              value={inviteUsers} 
-              onIonChange={e => setInviteUsers(e.detail.value!)}></IonTextarea>
-          </IonItem>
-          <IonItem>
-            <IonLabel>Access Level</IonLabel>
-            <IonSelect 
-              value={inviteAccess} 
-              placeholder="Select One" 
-              onIonChange={e => setInviteAccess(e.detail.value)}>
-              <IonSelectOption value="admin">admin</IonSelectOption>
-              <IonSelectOption value="user">user</IonSelectOption>
-            </IonSelect>
-          </IonItem>
-        </IonList>
-        </div>
-        <div className='ion-padding'>
-          <IonButton expand='block' color='medium' onClick={doInviteUsers}>
-            Invite Users
-          </IonButton>
-        <IonGrid>
-              <IonRow key={'invites_header'}>
-                <IonCol><b>Email</b></IonCol>
-                <IonCol><b>Created At</b></IonCol>
-                <IonCol><b>Result</b></IonCol>
-              </IonRow>
-          { invites.map((invite: any) => {
-            const created_at = new Date(invite.created_at);
-            return (
-              <IonRow key={invite.id}>
-                <IonCol>{invite.email}</IonCol>
-                <IonCol>{created_at.toLocaleString()}</IonCol>
-                <IonCol>{invite.result || 'pending'}</IonCol>
-              </IonRow>
-            )
-          })}
-        </IonGrid>
-          {/* <pre>
+				<div className='ion-padding'>
+					<div className='ion-padding' style={{ border: '1px solid' }}>
+						<div className='ion-padding'>
+							<IonList>
+								<IonItemDivider>Invite Users</IonItemDivider>
+								<IonItem>
+									<IonTextarea
+										placeholder='email1@host.com,email2@host.com'
+										value={inviteUsers}
+										onIonChange={(e) => setInviteUsers(e.detail.value!)}></IonTextarea>
+								</IonItem>
+								<IonItem>
+									<IonLabel>Access Level</IonLabel>
+									<IonSelect
+										value={inviteAccess}
+										placeholder='Select One'
+										onIonChange={(e) => setInviteAccess(e.detail.value)}>
+										<IonSelectOption value='admin'>admin</IonSelectOption>
+										<IonSelectOption value='user'>user</IonSelectOption>
+									</IonSelect>
+								</IonItem>
+							</IonList>
+						</div>
+						<div className='ion-padding'>
+							<IonButton expand='block' color='medium' onClick={doInviteUsers}>
+								Invite Users
+							</IonButton>
+							<IonGrid>
+								<IonRow key={'invites_header'}>
+									<IonCol>
+										<b>Email</b>
+									</IonCol>
+									<IonCol>
+										<b>Created At</b>
+									</IonCol>
+									<IonCol>
+										<b>Result</b>
+									</IonCol>
+								</IonRow>
+								{invites.map((invite: any) => {
+									const created_at = new Date(invite.created_at)
+									return (
+										<IonRow key={invite.id}>
+											<IonCol>{invite.email}</IonCol>
+											<IonCol>{created_at.toLocaleString()}</IonCol>
+											<IonCol>{invite.result || 'pending'}</IonCol>
+										</IonRow>
+									)
+								})}
+							</IonGrid>
+							{/* <pre>
             {JSON.stringify(invites, null, 2)}
           </pre> */}
-        </div>
-        </div>
-        </div>
+						</div>
+					</div>
+				</div>
 			</IonContent>
-      { childGroupCount === 0 &&
-        <IonFooter>
-        <div className='ion-padding'>
-          <IonButton expand='block' color='danger' onClick={deleteGroup}>
-            Delete Group
-          </IonButton>
-        </div>
-      </IonFooter>
-    }
+			{childGroupCount === 0 && (
+				<IonFooter>
+					<div className='ion-padding'>
+						<IonButton expand='block' color='danger' onClick={deleteGroup}>
+							Delete Group
+						</IonButton>
+					</div>
+				</IonFooter>
+			)}
 		</IonPage>
 	)
 }
