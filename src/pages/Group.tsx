@@ -220,12 +220,12 @@ const Group: React.FC = () => {
 				</IonToolbar>
 			</IonHeader>
 
-			<IonContent fullscreen>
-				<IonHeader collapse='condense'>
+			<IonContent>
+				{/* <IonHeader collapse='condense'>
 					<IonToolbar>
 						<IonTitle size='large'>Group</IonTitle>
 					</IonToolbar>
-				</IonHeader>
+				</IonHeader> */}
 				<div className='ion-padding'>
 					<IonList>
 						<IonItem lines='none'>

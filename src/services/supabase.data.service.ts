@@ -118,7 +118,20 @@ export default class SupabaseDataService {
     const { data, error } = await supabase
     .from('invitations')
     .select('*, groups(*)')
-    .eq('email', email);
+    .eq('email', email)
+    .is('closed_at', null);
+    return { data, error };
+  }
+  public async invitations_accept(id: string) {
+    console.log('invitations_accept, calling rpc invitations_accept');
+    const { data, error } = await supabase
+    .rpc('invitations_accept', {target: id});
+    console.log('invitations_accept, got data, error', data, error);
+    return { data, error };
+  }
+  public async invitations_reject(id: string) {
+    const { data, error } = await supabase
+    .rpc('invitations_reject', {target: id});
     return { data, error };
   }
   public async inviteUsersToGroup(current_user_id: string, group_id: string, userEmails: string[], inviteAccess: string) {

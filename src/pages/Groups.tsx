@@ -81,12 +81,12 @@ const Groups: React.FC = () => {
 				</IonToolbar>
 			</IonHeader>
 
-			<IonContent fullscreen>
-				<IonHeader collapse='condense'>
+			<IonContent>
+				{/* <IonHeader collapse='condense'>
 					<IonToolbar>
 						<IonTitle size='large'>Groups</IonTitle>
 					</IonToolbar>
-				</IonHeader>
+				</IonHeader> */}
 				<div className='ion-padding'>
 					<IonList>
 					{groups.map((group: any, idx: number) => {

@@ -1,22 +1,10 @@
-import {
-	IonButton,
-	IonButtons,
-	IonContent,
-	IonHeader,
-	IonItem,
-	IonLabel,
-	IonList,
-	IonListHeader,
-	IonMenuButton,
-	IonNote,
-	IonPage,
-	IonTitle,
-	IonToolbar,
-} from '@ionic/react'
-import './Dashboard.css'
-import SupabaseDataService from '../services/supabase.data.service'
-import { User, SupabaseAuthService } from 'ionic-react-supabase-login'
+import { IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonList, IonListHeader, IonMenuButton, IonNote, IonPage, IonTitle, IonToolbar } from '@ionic/react'
+import { SupabaseAuthService, User } from 'ionic-react-supabase-login'
 import { useEffect, useState } from 'react'
+
+import SupabaseDataService from '../services/supabase.data.service'
+
+import './Dashboard.css'
 
 const supabaseDataService = SupabaseDataService.getInstance()
 
@@ -55,9 +43,31 @@ const Dashboard: React.FC = () => {
 			setInvites(data)
 		}
 	}
-	const acceptInvite = async (invite_id: string) => { console.log('acceptInvite', invite_id) }
-	const rejectInvite = async (invite_id: string) => { console.log('rejectInvite', invite_id) }
-  const getGroupInfo = async (group_id: string) => { console.log('getGroupInfo', group_id) }
+	const acceptInvite = async (invite_id: string) => { 		
+		console.log('acceptInvite', invite_id) 
+		const user_id: any = user?.id;
+		const { data, error } = await supabaseDataService.invitations_accept(invite_id)
+		if (error) {
+			console.error('error accepting invite', error)
+		} else {
+			console.log('invitations_accept data', data)
+			// reload page
+			window.location.reload()
+		}
+	}
+	const rejectInvite = async (invite_id: string) => { 		
+		console.log('rejectInvite', invite_id) 
+		const user_id: any = user?.id;
+		const { data, error } = await supabaseDataService.invitations_reject(invite_id)
+		if (error) {
+			console.error('error rejecting invite', error)
+		} else {
+			console.log('invitations_reject data', data)
+			// reload page
+			window.location.reload()
+		}
+	}
+  	const getGroupInfo = async (group_id: string) => { console.log('getGroupInfo', group_id) }
 	return (
 		<IonPage>
 			<IonHeader>
@@ -76,7 +86,8 @@ const Dashboard: React.FC = () => {
           </IonToolbar>
         </IonHeader> */}
 				<div className='ion-padding'>
-					{invites.length && (
+					Dashboard Page
+					{(invites && invites.length > 0) && (
 						<IonList>
 							<IonListHeader>You have been invited to join:</IonListHeader>
 							{invites.map((invite, index) => {
@@ -115,7 +126,6 @@ const Dashboard: React.FC = () => {
 							})}
 						</IonList>
 					)}
-					{/* <pre>{JSON.stringify(invites, null, 2)}</pre> */}
 				</div>
 			</IonContent>
 		</IonPage>
