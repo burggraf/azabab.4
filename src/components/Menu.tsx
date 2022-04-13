@@ -1,4 +1,4 @@
-import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote } from '@ionic/react'
+import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote } from '@ionic/react'
 import { Login, ResetPassword, User, SupabaseAuthService} from 'ionic-react-supabase-login';
 import { barChartOutline, barChartSharp, peopleOutline, peopleSharp } from 'ionicons/icons'
 import { useEffect, useMemo, useState } from 'react';
@@ -47,6 +47,9 @@ const Menu: React.FC = () => {
 	const [ appPages, setAppPages ] = useState<AppPage[]>(pages);
 	const goToProfile = async () => {
 		history.replace('/profile');
+	}
+	const goToDashboard = async () => {
+		history.replace('/dashboard');
 	}
 	const onSignIn = (user: any, session: any) =>{
 		window.location.reload();
@@ -115,6 +118,18 @@ const Menu: React.FC = () => {
 						SUPABASE_KEY={process.env.REACT_APP_SUPABASE_KEY || ''}
 					/>
 
+					{ invites.length > 0 &&
+						<div className="ion-padding">
+						<IonMenuToggle key={'pendingInvites'} autoHide={false}>
+							<IonButton
+							onClick={goToDashboard}
+							size='small'
+							expand='block'
+							color='danger'>
+							See Pending Invites</IonButton>
+						</IonMenuToggle>
+						</div>
+					}
 					{appPages.map((appPage, index) => {
 						if (appPage.showIf) {
 						return (
@@ -134,9 +149,9 @@ const Menu: React.FC = () => {
 						}
 					})}
 				</IonList>
-				<pre>
+				{/* <pre>
 					{ JSON.stringify(invites, null, 2) }
-				</pre>
+				</pre> */}
 			</IonContent>
 		</IonMenu>
 	)

@@ -117,7 +117,7 @@ export default class SupabaseDataService {
   public async getMyInvitations(email: string) {
     const { data, error } = await supabase
     .from('invitations')
-    .select('*')
+    .select('*, groups(*)')
     .eq('email', email);
     return { data, error };
   }
