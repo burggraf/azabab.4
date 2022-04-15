@@ -100,9 +100,9 @@ export default class SupabaseDataService {
     return { data, error };
   }
 
-  public async groups_get_tree_for_user(user_id: string) {
+  public async groups_get_tree_for_group(id: string) {
     const { data, error } =
-    await supabase.rpc('groups_get_tree_for_user', {target_user_id: user_id});
+    await supabase.rpc('groups_get_tree_for_group', {target_group_id: id});
     return { data, error };
   }
   public async groups_get_groups_for_user(user_id: string) {

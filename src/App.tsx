@@ -26,6 +26,8 @@ import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import NotFound from './pages/NotFound'
 import Profile from './pages/Profile'
+import Griddy from './pages/Griddy'
+import GroupTree from './pages/GroupTree'
 
 setupIonicReact({
 	// rippleEffect: false,
@@ -48,9 +50,11 @@ const App: React.FC = () => {
 							<Route path='/dashboard' exact={true} component={Dashboard} />
 							<Route path='/groups' exact={true} component={Groups} />
 							<Route path='/group' exact={true} component={Group} />
+							<Route path='/grouptree/:id' exact={true} component={GroupTree} />
 							<Route path='/group/:id' exact={true} component={Group} />
 							<Route path='/privacy' exact={true} component={Privacy} />
 							<Route path='/terms' exact={true} component={Terms} />
+							<Route path="/griddy" component={Griddy} />
 							<Route component={NotFound} />
 						</Switch>
 					</IonRouterOutlet>

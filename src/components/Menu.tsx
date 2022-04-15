@@ -42,6 +42,13 @@ const Menu: React.FC = () => {
 			mdIcon: peopleSharp,
 			showIf: user !== null
 		},
+		{
+			title: 'Griddy',
+			url: '/griddy',
+			iosIcon: peopleOutline,
+			mdIcon: peopleSharp,
+			showIf: user !== null
+		},
 	], [user]);
 
 	const [ appPages, setAppPages ] = useState<AppPage[]>(pages);

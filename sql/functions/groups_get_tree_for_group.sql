@@ -3,8 +3,8 @@ RETURNS TABLE (id uuid,parent_id uuid,name text,description text,level numeric) 
 $$
 WITH RECURSIVE tree AS (
     SELECT
-        groups.id,
-        groups.parent_id,
+        groups.id as id,
+        groups.parent_id as parent_id,
         COALESCE(groups.name, '') as name, 
         COALESCE(groups.description, '') as description, 
         0 as level,
@@ -15,8 +15,8 @@ WITH RECURSIVE tree AS (
         parent_id IS NULL and groups.id = groups_get_root_id(target_group_id)
     UNION ALL
     SELECT
-        groups.id,
-        groups.parent_id,
+        groups.id as id,
+        groups.parent_id as parent_id,
         COALESCE(groups.name, '') as name, 
         COALESCE(groups.description, '') as description, 
         tree.level + 1 as level,
@@ -26,7 +26,7 @@ WITH RECURSIVE tree AS (
         JOIN groups ON groups.parent_id = tree.id
 )
 
-SELECT id,parent_id,name,description,level FROM tree order by path;
+SELECT DISTINCT ON (path) id,parent_id,name,description,level FROM tree ORDER BY path;
 
 $$
 LANGUAGE sql;
