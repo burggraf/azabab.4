@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, 
+import { IonBackButton, IonButtons, IonContent, IonHeader, 
     IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { useEffect, useState } from 'react'
 
@@ -14,15 +14,15 @@ const Griddy: React.FC = () => {
     console.log('r', r)
     return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.substring(r,r+1);
   }
-  const getLetterQueue = async () => {
-    const q = [];
-    for (let i=0; i < 9; i++) {
-      q.push(getRandomLetter())
-    }
-    setQueue(q);
-  }
   useEffect(() => {
-		console.log('*** Griddy: useEffect [] ***')
+    const getLetterQueue = async () => {
+      const q = [];
+      for (let i=0; i < 9; i++) {
+        q.push(getRandomLetter())
+      }
+      setQueue(q);
+    }
+      console.log('*** Griddy: useEffect [] ***')
     getLetterQueue();
     return () => {
 		}

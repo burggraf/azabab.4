@@ -36,9 +36,9 @@ const GroupTree: React.FC = () => {
 		return () => {
 			subscription.unsubscribe()
 		}
-	}, [])
+	}, [id])
 
-
+    console.log('user', user);
 	const gotoGroup = (id: string) => {
 		history.push(`/group/${id}`)
 	}
