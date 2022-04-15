@@ -26,7 +26,7 @@ import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import NotFound from './pages/NotFound'
 import Profile from './pages/Profile'
-import Griddy from './pages/games/Griddy'
+import Griddy from './pages/games/Griddy/Griddy'
 import GroupTree from './pages/GroupTree'
 
 setupIonicReact({
