@@ -105,6 +105,11 @@ export default class SupabaseDataService {
     await supabase.rpc('groups_get_tree_for_user', {target_user_id: user_id});
     return { data, error };
   }
+  public async groups_get_groups_for_user(user_id: string) {
+    const { data, error } =
+    await supabase.rpc('groups_get_groups_for_user', {target_user_id: user_id});
+    return { data, error };
+  }
   public async getInvitations(group_id: string) {
     console.log('data service getInvitations', group_id);
     const { data, error } = await supabase
