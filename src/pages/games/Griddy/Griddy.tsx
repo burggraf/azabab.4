@@ -9,7 +9,7 @@ import './Griddy.css';
 const griddyService = GriddyService.getInstance();
 
 const Griddy: React.FC = () => {
-  const GRID_SIZE = 3;
+  const GRID_SIZE = 4;
   const [queue,setQueue] = useState<string[]>([])
   const [choices,setChoices] = useState<string[]>([])
   const [activeChoice,setActiveChoice] = useState<number>(-1)
@@ -23,7 +23,7 @@ const Griddy: React.FC = () => {
       console.log('griddyService.init error:', error);
     } else {
       const q = [];
-      for (let i=0; i < 9; i++) {
+      for (let i=0; i < (GRID_SIZE * GRID_SIZE); i++) {
         q.push(griddyService.getRandomLetter(GRID_SIZE))
       }
       setQueue(q);
@@ -36,7 +36,7 @@ const Griddy: React.FC = () => {
 		}
 	}, [])
   useEffect(() => {
-    setChoices(queue.slice(0,3));
+    setChoices(queue.slice(0,GRID_SIZE));
     if (queue.length === 0 && board[GRID_SIZE-1][GRID_SIZE-1] !== '') {
       console.log('**** DONE ****');
       calculateScore();
