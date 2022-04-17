@@ -34,6 +34,7 @@ export default class GriddyService {
             if (!L[item.wordlength]) L[item.wordlength] = [];
             const LL = L[item.wordlength];
             LL.push({letter: item.letter, cutoff: item.cutoff});
+            return null;
         });
         return { error };
     }
@@ -53,8 +54,8 @@ export default class GriddyService {
 
     public calculateScore = async (board: any) => {
         console.log('calculateScore: board', board);
-        let score = 0;
-        let successfulWords = [];
+        // let score = 0;
+        // let successfulWords = [];
         const GRID_SIZE = board[0].length;
         const trials: string[] = [];
         // create words across

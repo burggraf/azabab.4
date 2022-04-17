@@ -1,6 +1,6 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, 
     IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol } from '@ionic/react';
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import GriddyService from './griddy.service';
 
 //import { useParams } from 'react-router';
@@ -30,6 +30,22 @@ const Griddy: React.FC = () => {
     }
   }
 
+  const calculateScore = useCallback(async () => {
+    const {data, error} = await griddyService.calculateScore(board);
+    console.log('griddyService.calculateScore', data, error);
+    if (error) {
+      console.error('calculateScore error:', error);
+    } else {
+      if (data) {
+        setScore((data || '').split(', ').length);
+        setSuccessfulWords(data || '');    
+      } else {
+        setScore(0);
+        setSuccessfulWords('none found');    
+      }
+    }
+  }, [board]);
+
   useEffect(() => {
     init();
     return () => {
@@ -41,7 +57,7 @@ const Griddy: React.FC = () => {
       console.log('**** DONE ****');
       calculateScore();
     }
-  },[queue])
+  },[queue, calculateScore, board])
 
   const toggleChoiceBox = (i:number) => {
     console.log('toggleChoiceBox', i)
@@ -76,21 +92,6 @@ const Griddy: React.FC = () => {
     newQueue.splice(activeChoice,1);
     setQueue(newQueue);
     setActiveChoice(-1);
-  }
-  const calculateScore = async () => {
-    const {data, error} = await griddyService.calculateScore(board);
-    console.log('griddyService.calculateScore', data, error);
-    if (error) {
-      console.error('calculateScore error:', error);
-    } else {
-      if (data) {
-        setScore((data || '').split(', ').length);
-        setSuccessfulWords(data || '');    
-      } else {
-        setScore(0);
-        setSuccessfulWords('none found');    
-      }
-    }
   }
   return (
     <IonPage>
