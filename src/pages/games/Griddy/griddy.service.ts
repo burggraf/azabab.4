@@ -86,27 +86,32 @@ export default class GriddyService {
         }
         trials.push(trial);
         console.log('trials', trials);
-        for (let i=0; i<trials.length; i++) {
-            const trial = trials[i];
-            const { count, error } = 
-            await supabaseDataService.supabase
-            .from('words')
-            .select('word',{ count: 'exact' })
-            .eq('word', trial);
-            if (error) {
-                console.error('calculateScore error', error);
-                return;
-            } else {
-                if (count) {
-                    score++;
-                    console.log(trial, 'SCORE!', score)
-                    successfulWords.push(trial);
-                } else {
-                    console.log(trial, 'MISS!', score)
-                }
-            }
-        }
-        return {score, successfulWords};
+        
+        const { data, error } = await supabaseDataService.supabase
+        .rpc('calculate_score', {trials});
+        console.log('calculate_score data, error', data, error);
+
+        // for (let i=0; i<trials.length; i++) {
+        //     const trial = trials[i];
+        //     const { count, error } = 
+        //     await supabaseDataService.supabase
+        //     .from('words')
+        //     .select('word',{ count: 'exact' })
+        //     .eq('word', trial);
+        //     if (error) {
+        //         console.error('calculateScore error', error);
+        //         return;
+        //     } else {
+        //         if (count) {
+        //             score++;
+        //             console.log(trial, 'SCORE!', score)
+        //             successfulWords.push(trial);
+        //         } else {
+        //             console.log(trial, 'MISS!', score)
+        //         }
+        //     }
+        // }
+        return {data, error};
     }
 
 
