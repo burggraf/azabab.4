@@ -19,7 +19,9 @@ export default class SupabaseDataService {
   public isConnected = () => {
     return (typeof supabase !== 'undefined');
   }
-
+  public getSupabase = () => {
+    return supabase;
+  }
   public connect = async () => {
       if (this.isConnected()) { return; }
       supabase = await createClient(

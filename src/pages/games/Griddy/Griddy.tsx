@@ -1,10 +1,12 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, 
     IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { useEffect, useState } from 'react'
+import GriddyService from './griddy.service';
 
 //import { useParams } from 'react-router';
 //import ExploreContainer from '../components/ExploreContainer';
 import './Griddy.css';
+const griddyService = GriddyService.getInstance();
 
 const Griddy: React.FC = () => {
   const GRID_SIZE = 3;
@@ -13,21 +15,21 @@ const Griddy: React.FC = () => {
   const [activeChoice,setActiveChoice] = useState<number>(-1)
   const [board,setBoard] = useState<string[][]>([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')) )
   // const { name } = useParams<{ name: string; }>();
-  const getRandomLetter = () => {
-    const r = Math.floor(Math.random() * 26);
-    console.log('r', r)
-    return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.substring(r,r+1);
-  }
-  useEffect(() => {
-    const getLetterQueue = async () => {
+  const init = async () => {
+    const { error } = await griddyService.init();
+    if (error) {
+      console.log('griddyService.init error:', error);
+    } else {
       const q = [];
       for (let i=0; i < 9; i++) {
-        q.push(getRandomLetter())
+        q.push(griddyService.getRandomLetter(GRID_SIZE))
       }
       setQueue(q);
     }
-      console.log('*** Griddy: useEffect [] ***')
-    getLetterQueue();
+  }
+
+  useEffect(() => {
+    init();
     return () => {
 		}
 	}, [])
@@ -78,7 +80,7 @@ const Griddy: React.FC = () => {
 
       <IonContent className="ion-padding">
       <div className="centeredDiv">
-        <IonGrid style={{width: '300px', maxWidth: '300px', backgroundColor: 'lightgray'}}>
+        <IonGrid style={{width: '300px', maxWidth: '300px', minHeight: '100px', backgroundColor: 'lightgray'}}>
             <IonRow key='choices'>
               {choices.map((choice,choiceIndex) => (
                   <IonCol 
