@@ -51,6 +51,41 @@ export default class GriddyService {
         return '?';
     }
 
+    public calculateScore = (board: any) => {
+        console.log('calculateScore: board', board);
+        const GRID_SIZE = board[0].length;
+        const trials: string[] = [];
+        // create words across
+        for (let i=0; i<GRID_SIZE; i++) {
+            let trial = '';
+            for (let j=0; j<GRID_SIZE; j++) {
+                trial += board[i][j];
+            }
+            trials.push(trial);
+        }
+        // create words down
+        for (let i=0; i<GRID_SIZE; i++) {
+            let trial = '';
+            for (let j=0; j<GRID_SIZE; j++) {
+                trial += board[j][i];
+            }
+            trials.push(trial);
+        }
+        // diagonal down
+        let trial = '';
+        for (let i=0; i<GRID_SIZE; i++) {
+            trial += board[i][i];
+        }
+        trials.push(trial);
+        trial = '';
+        // diagonal up
+        for (let i=GRID_SIZE-1,j=0; i>=0; i--,j++) {
+            trial += board[i][j];
+        }
+        trials.push(trial);
+        console.log('trials', trials);
+        return 0;
+    }
 
 
 }

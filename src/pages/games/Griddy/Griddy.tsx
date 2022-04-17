@@ -35,6 +35,10 @@ const Griddy: React.FC = () => {
 	}, [])
   useEffect(() => {
     setChoices(queue.slice(0,3));
+    if (queue.length === 0) {
+      console.log('**** DONE ****');
+      calculateScore();
+    }
   },[queue])
 
   const toggleChoiceBox = (i:number) => {
@@ -55,6 +59,10 @@ const Griddy: React.FC = () => {
     }
   }
   const placeChoice = (row: number, col: number) => {
+    if (board[row][col] !== '') {
+      console.log('placeChoice: already filled');
+      return;
+    }
     console.log('placeChoice', row, col)
     const choice = choices[activeChoice];
     const newBoard = [...board];
@@ -66,6 +74,10 @@ const Griddy: React.FC = () => {
     newQueue.splice(activeChoice,1);
     setQueue(newQueue);
     setActiveChoice(-1);
+  }
+  const calculateScore = () => {
+    const score = griddyService.calculateScore(board);
+    console.log('calculateScore', score);
   }
   return (
     <IonPage>
