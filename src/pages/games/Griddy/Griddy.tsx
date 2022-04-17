@@ -14,6 +14,8 @@ const Griddy: React.FC = () => {
   const [choices,setChoices] = useState<string[]>([])
   const [activeChoice,setActiveChoice] = useState<number>(-1)
   const [board,setBoard] = useState<string[][]>([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')) )
+  const [score,setScore] = useState<number>(0)
+  const [successfulWords,setSuccessfulWords] = useState<string[]>([])
   // const { name } = useParams<{ name: string; }>();
   const init = async () => {
     const { error } = await griddyService.init();
@@ -35,7 +37,7 @@ const Griddy: React.FC = () => {
 	}, [])
   useEffect(() => {
     setChoices(queue.slice(0,3));
-    if (queue.length === 0) {
+    if (queue.length === 0 && board[GRID_SIZE-1][GRID_SIZE-1] !== '') {
       console.log('**** DONE ****');
       calculateScore();
     }
@@ -75,9 +77,11 @@ const Griddy: React.FC = () => {
     setQueue(newQueue);
     setActiveChoice(-1);
   }
-  const calculateScore = () => {
-    const score = griddyService.calculateScore(board);
-    console.log('calculateScore', score);
+  const calculateScore = async () => {
+    const result = await griddyService.calculateScore(board);
+    console.log('calculateScore', result.score, result.successfulWords);
+    setScore(result.score);
+    setSuccessfulWords(result.successfulWords);
   }
   return (
     <IonPage>
@@ -118,6 +122,10 @@ const Griddy: React.FC = () => {
               </IonRow>
             ))}
         </IonGrid>
+        </div>
+        <div className="centeredDiv">
+          SCORE: {score}<br/>
+          WORDS: {successfulWords.join(', ')}<br/>
         </div>
         <pre>{JSON.stringify(board,null,2)}</pre>
         <pre>{JSON.stringify(queue,null,2)}</pre>

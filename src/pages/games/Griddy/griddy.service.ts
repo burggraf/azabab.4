@@ -13,13 +13,13 @@ export default class GriddyService {
     }
     
     static weightedLetters: any = {};
-
+    static supabase: any;
     // constructor() {}
     public init = async () => {
         console.log('GriddyService.init');
         await supabaseDataService.connect();
-        const supabase = supabaseDataService.getSupabase();
-        const { data, error } = await supabase
+        supabaseDataService.supabase = supabaseDataService.getSupabase();
+        const { data, error } = await supabaseDataService.supabase
         .from('letters')
         .select('wordlength,letter,cutoff')
         .order('wordlength', 'asc')
@@ -51,8 +51,10 @@ export default class GriddyService {
         return '?';
     }
 
-    public calculateScore = (board: any) => {
+    public calculateScore = async (board: any) => {
         console.log('calculateScore: board', board);
+        let score = 0;
+        let successfulWords = [];
         const GRID_SIZE = board[0].length;
         const trials: string[] = [];
         // create words across
@@ -84,7 +86,27 @@ export default class GriddyService {
         }
         trials.push(trial);
         console.log('trials', trials);
-        return 0;
+        for (let i=0; i<trials.length; i++) {
+            const trial = trials[i];
+            const { count, error } = 
+            await supabaseDataService.supabase
+            .from('words')
+            .select('word',{ count: 'exact' })
+            .eq('word', trial);
+            if (error) {
+                console.error('calculateScore error', error);
+                return;
+            } else {
+                if (count) {
+                    score++;
+                    console.log(trial, 'SCORE!', score)
+                    successfulWords.push(trial);
+                } else {
+                    console.log(trial, 'MISS!', score)
+                }
+            }
+        }
+        return {score, successfulWords};
     }
 
 
