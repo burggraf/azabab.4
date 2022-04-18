@@ -51,9 +51,9 @@ const Griddy: React.FC = () => {
       }
       setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
       setQueue(q);
-      setTimeout(() => {
-        toggleChoiceBox(0);
-      },100);
+      // setTimeout(() => {
+      //   toggleChoiceBox(0);
+      // },100);
     }
   },[GRID_SIZE,toggleChoiceBox, initialized]);
 
@@ -107,11 +107,12 @@ const Griddy: React.FC = () => {
     const newQueue = [...queue];
     newQueue.splice(activeChoice,1);
     setQueue(newQueue);
-    setActiveChoice(-1);
     setTimeout(() => {
       if (queue.length > activeChoice+1) {
         toggleChoiceBox(activeChoice);
         setActiveChoice(activeChoice);
+      } else {
+        setActiveChoice(-1);
       }
     },100);
   }
