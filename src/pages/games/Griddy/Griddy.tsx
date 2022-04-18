@@ -27,6 +27,9 @@ const Griddy: React.FC = () => {
         q.push(griddyService.getRandomLetter(GRID_SIZE))
       }
       setQueue(q);
+      setTimeout(() => {
+        toggleChoiceBox(0);
+      },100);
     }
   }
 
@@ -79,6 +82,10 @@ const Griddy: React.FC = () => {
   const placeChoice = (row: number, col: number) => {
     if (board[row][col] !== '') {
       console.log('placeChoice: already filled');
+      return;
+    }
+    if (activeChoice === -1) {
+      console.log('placeChoice: no active choice');
       return;
     }
     console.log('placeChoice', row, col)
