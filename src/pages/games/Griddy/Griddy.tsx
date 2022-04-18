@@ -16,7 +16,7 @@ const Griddy: React.FC = () => {
   const [queue,setQueue] = useState<string[]>([])
   const [choices,setChoices] = useState<string[]>([])
   const [activeChoice,setActiveChoice] = useState<number>(-1)
-  const [board,setBoard] = useState<string[][]>([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
+  const [board,setBoard] = useState<string[][]>([])
   const [score,setScore] = useState<number>(0)
   const [successfulWords,setSuccessfulWords] = useState<string>('')
   // const { name } = useParams<{ name: string; }>();
@@ -49,12 +49,13 @@ const Griddy: React.FC = () => {
       for (let i=0; i < (GRID_SIZE * GRID_SIZE); i++) {
         q.push(griddyService.getRandomLetter(GRID_SIZE))
       }
+      setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
       setQueue(q);
       setTimeout(() => {
         toggleChoiceBox(0);
       },100);
     }
-  },[GRID_SIZE,toggleChoiceBox]);
+  },[GRID_SIZE,toggleChoiceBox, initialized]);
 
   const calculateScore = useCallback(async () => {
     const {data, error} = await griddyService.calculateScore(board);
@@ -79,6 +80,9 @@ const Griddy: React.FC = () => {
 	}, [init]);
 
   useEffect(() => {
+    if (board.length === 0) {
+      return;
+    }
     setChoices(queue.slice(0,GRID_SIZE));
     if (queue.length === 0 && board[GRID_SIZE-1][GRID_SIZE-1] !== '') {
       calculateScore();
