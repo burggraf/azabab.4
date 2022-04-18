@@ -153,7 +153,7 @@ const Griddy: React.FC = () => {
 
       <IonContent className="ion-padding">
       <div className="centeredDiv">
-        <IonGrid style={{width: '600px', maxWidth: '600px', minHeight: '100px'}}>
+        <IonGrid style={{width: '100%'}}>
             <IonRow key='choices'>
               {choices.map((choice,choiceIndex) => (
                   <IonCol 
@@ -169,7 +169,7 @@ const Griddy: React.FC = () => {
         </IonGrid>
         </div>
         <div className="centeredDiv">
-        <IonGrid style={{width: '600px', maxWidth: '600px'}}>
+        <IonGrid style={{width: '100%'}}>
             {board.map((row, rowIndex) => (
               <IonRow>
                 {row.map((col, colIndex) => (
