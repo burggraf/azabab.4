@@ -1,16 +1,17 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, 
-    IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonMenuButton, IonButton, IonIcon, IonSelect, IonSelectOption, IonItem } from '@ionic/react';
+import { IonButtons, IonContent, IonHeader, 
+    IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonMenuButton, IonButton, IonIcon, IonSelect, IonSelectOption } from '@ionic/react';
 import { useCallback, useEffect, useState } from 'react'
 import GriddyService from './griddy.service';
 
 //import { useParams } from 'react-router';
 //import ExploreContainer from '../components/ExploreContainer';
 import './Griddy.css';
-import { refreshCircle, refreshCircleOutline } from 'ionicons/icons';
+import { refreshCircleOutline } from 'ionicons/icons';
 const griddyService = GriddyService.getInstance();
 
 const Griddy: React.FC = () => {
   //const GRID_SIZE = 4;
+  const [initialized, setInitialized] = useState(false);
   const [GRID_SIZE, setGRID_SIZE] = useState(4);
   const [queue,setQueue] = useState<string[]>([])
   const [choices,setChoices] = useState<string[]>([])
@@ -19,7 +20,27 @@ const Griddy: React.FC = () => {
   const [score,setScore] = useState<number>(0)
   const [successfulWords,setSuccessfulWords] = useState<string>('')
   // const { name } = useParams<{ name: string; }>();
-  const init = async () => {
+  const toggleChoiceBox = useCallback((i:number) => {
+    const item = document.getElementById(`choice${i}`);
+    if (activeChoice === i) {
+      item?.classList.toggle('selected');
+      setActiveChoice(-1);
+    } else if (activeChoice > -1) {
+      const oldItem = document.getElementById(`choice${activeChoice}`);
+      oldItem?.classList.toggle('selected');
+      item?.classList.toggle('selected');
+      setActiveChoice(i);  
+    } else {
+      item?.classList.toggle('selected');
+      setActiveChoice(i);  
+    }
+  },[activeChoice]);
+
+  const init = useCallback(async () => {
+    if (initialized) {
+      return;
+    }
+    setInitialized(true);
     const { error } = await griddyService.init();
     if (error) {
       console.log('griddyService.init error:', error);
@@ -33,7 +54,7 @@ const Griddy: React.FC = () => {
         toggleChoiceBox(0);
       },100);
     }
-  }
+  },[GRID_SIZE,toggleChoiceBox]);
 
   const calculateScore = useCallback(async () => {
     const {data, error} = await griddyService.calculateScore(board);
@@ -55,29 +76,15 @@ const Griddy: React.FC = () => {
     init();
     return () => {
 		}
-	}, [])
+	}, [init]);
+
   useEffect(() => {
     setChoices(queue.slice(0,GRID_SIZE));
     if (queue.length === 0 && board[GRID_SIZE-1][GRID_SIZE-1] !== '') {
       calculateScore();
     }
-  },[queue, calculateScore, board])
+  },[queue, calculateScore, board, GRID_SIZE])
 
-  const toggleChoiceBox = (i:number) => {
-    const item = document.getElementById(`choice${i}`);
-    if (activeChoice === i) {
-      item?.classList.toggle('selected');
-      setActiveChoice(-1);
-    } else if (activeChoice > -1) {
-      const oldItem = document.getElementById(`choice${activeChoice}`);
-      oldItem?.classList.toggle('selected');
-      item?.classList.toggle('selected');
-      setActiveChoice(i);  
-    } else {
-      item?.classList.toggle('selected');
-      setActiveChoice(i);  
-    }
-  }
   const placeChoice = (row: number, col: number) => {
     if (board[row][col] !== '') {
       console.log('placeChoice: already filled');
@@ -105,10 +112,10 @@ const Griddy: React.FC = () => {
     },100);
   }
   const reset = async (newSize: number = GRID_SIZE) => {
+    setInitialized(false);
     console.log('reset');
     setBoard([...Array(newSize)].map(x=>Array(newSize).fill('')));
     init();
-
   }
 
   return (
