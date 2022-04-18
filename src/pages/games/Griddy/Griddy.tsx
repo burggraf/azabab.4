@@ -99,6 +99,12 @@ const Griddy: React.FC = () => {
     newQueue.splice(activeChoice,1);
     setQueue(newQueue);
     setActiveChoice(-1);
+    setTimeout(() => {
+      if (queue.length > activeChoice+1) {
+        toggleChoiceBox(activeChoice);
+        setActiveChoice(activeChoice);
+      }
+    },100);
   }
   return (
     <IonPage>
