@@ -144,7 +144,7 @@ const Griddy: React.FC = () => {
       </IonHeader>
 
       <IonContent className="ion-padding">
-      <div className="centeredDiv">
+      <div className="flexcontainer wrap">
         <IonGrid style={{width: '100%'}}>
             <IonRow key='choices'>
               {choices.map((choice,choiceIndex) => (
@@ -153,7 +153,7 @@ const Griddy: React.FC = () => {
                       key={`choice${choiceIndex}`} 
                       id={`choice${choiceIndex}`}
                       onClick={() => toggleChoiceBox(choiceIndex)}
-                      className="choice">
+                      className="flex-item">
                         {choice}
                       </IonCol>
               ))}
