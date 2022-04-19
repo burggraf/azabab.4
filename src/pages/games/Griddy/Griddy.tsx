@@ -149,7 +149,7 @@ const Griddy: React.FC = () => {
             <IonRow key='choices'>
               {choices.map((choice,choiceIndex) => (
                   <IonCol 
-                      style={{backgroundColor: 'lightgray'}}
+                      style={{backgroundColor: 'var(--ion-color-light)',border:'1px solid var(--ion-color-medium)'}}
                       key={`choice${choiceIndex}`} 
                       id={`choice${choiceIndex}`}
                       onClick={() => toggleChoiceBox(choiceIndex)}
