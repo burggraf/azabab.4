@@ -173,13 +173,13 @@ const Griddy: React.FC = () => {
             ))}
         </IonGrid>
         </div>
-        <div className="centeredDiv">
+        <div>
           SCORE: {score}<br/>
           WORDS: {successfulWords}<br/>
         </div>
-        <pre>activeChoice: {activeChoice}</pre>
+        {/* <pre>activeChoice: {activeChoice}</pre>
         <pre>board: {JSON.stringify(board)}</pre>
-        <pre>choices: {JSON.stringify(choices)}</pre>
+        <pre>choices: {JSON.stringify(choices)}</pre> */}
       </IonContent>
     </IonPage>
   );
