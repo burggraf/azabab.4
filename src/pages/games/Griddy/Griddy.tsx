@@ -13,7 +13,6 @@ const Griddy: React.FC = () => {
   //const GRID_SIZE = 4;
   const [initialized, setInitialized] = useState(false);
   const [GRID_SIZE, setGRID_SIZE] = useState(4);
-  const [queue,setQueue] = useState<string[]>([])
   const [choices,setChoices] = useState<string[]>([])
   const [activeChoice,setActiveChoice] = useState<number>(-1)
   const [board,setBoard] = useState<string[][]>([])
@@ -22,6 +21,9 @@ const Griddy: React.FC = () => {
   // const { name } = useParams<{ name: string; }>();
   const toggleChoiceBox = useCallback((i:number) => {
     const item = document.getElementById(`choice${i}`);
+    if (item?.innerText === '') { // (choices[i] === '') {
+      return;
+    }
     if (activeChoice === i) {
       item?.classList.toggle('selected');
       setActiveChoice(-1);
@@ -45,15 +47,15 @@ const Griddy: React.FC = () => {
     if (error) {
       console.log('griddyService.init error:', error);
     } else {
+      console.log('set q to []')
       const q = [];
       for (let i=0; i < (GRID_SIZE * GRID_SIZE); i++) {
         q.push(griddyService.getRandomLetter(GRID_SIZE))
       }
+      console.log('q is now', q)
+      setChoices(q);
       setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
-      setQueue(q);
-      // setTimeout(() => {
-      //   toggleChoiceBox(0);
-      // },100);
+      setActiveChoice(-1);
     }
   },[GRID_SIZE,toggleChoiceBox, initialized]);
 
@@ -83,11 +85,10 @@ const Griddy: React.FC = () => {
     if (board.length === 0) {
       return;
     }
-    setChoices(queue.slice(0,GRID_SIZE));
-    if (queue.length === 0 && board[GRID_SIZE-1][GRID_SIZE-1] !== '') {
+    if (choices.join('').length === 0 && board[GRID_SIZE-1][GRID_SIZE-1] !== '') {
       calculateScore();
     }
-  },[queue, calculateScore, board, GRID_SIZE])
+  },[choices, calculateScore, board, GRID_SIZE])
 
   const placeChoice = (row: number, col: number) => {
     if (board[row][col] !== '') {
@@ -103,23 +104,13 @@ const Griddy: React.FC = () => {
     newBoard[row][col] = choice;
     setBoard(newBoard);
     toggleChoiceBox(activeChoice);
-    // remove the active choice from the queue
-    const newQueue = [...queue];
-    newQueue.splice(activeChoice,1);
-    setQueue(newQueue);
-    setTimeout(() => {
-      if (queue.length > activeChoice+1) {
-        toggleChoiceBox(activeChoice);
-        setActiveChoice(activeChoice);
-      } else {
-        setActiveChoice(-1);
-      }
-    },100);
+    choices[activeChoice] = '';
+    setActiveChoice(-1);
   }
   const reset = async (newSize: number = GRID_SIZE) => {
     setInitialized(false);
     console.log('reset');
-    setBoard([...Array(newSize)].map(x=>Array(newSize).fill('')));
+    // setBoard([...Array(newSize)].map(x=>Array(newSize).fill('')));
     init();
   }
 
@@ -162,7 +153,7 @@ const Griddy: React.FC = () => {
                       key={`choice${choiceIndex}`} 
                       id={`choice${choiceIndex}`}
                       onClick={() => toggleChoiceBox(choiceIndex)}
-                      className="boxed">
+                      className="choice">
                         {choice}
                       </IonCol>
               ))}
@@ -186,8 +177,9 @@ const Griddy: React.FC = () => {
           SCORE: {score}<br/>
           WORDS: {successfulWords}<br/>
         </div>
-        <pre>{JSON.stringify(board,null,2)}</pre>
-        <pre>{JSON.stringify(queue,null,2)}</pre>
+        <pre>activeChoice: {activeChoice}</pre>
+        <pre>board: {JSON.stringify(board)}</pre>
+        <pre>choices: {JSON.stringify(choices)}</pre>
       </IonContent>
     </IonPage>
   );

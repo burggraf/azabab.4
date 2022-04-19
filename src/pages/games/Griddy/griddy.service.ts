@@ -15,8 +15,10 @@ export default class GriddyService {
     static weightedLetters: any = {};
     static supabase: any;
     // constructor() {}
+    static initialized = false;
     public init = async () => {
         console.log('GriddyService.init');
+        if (GriddyService.initialized) { return {error:null}; }
         await supabaseDataService.connect();
         supabaseDataService.supabase = supabaseDataService.getSupabase();
         const { data, error } = await supabaseDataService.supabase
@@ -36,6 +38,9 @@ export default class GriddyService {
             LL.push({letter: item.letter, cutoff: item.cutoff});
             return null;
         });
+        if (!error) {
+            GriddyService.initialized = true;
+        }
         return { error };
     }
     public getRandomLetter = (GRID_SIZE: number) => {
