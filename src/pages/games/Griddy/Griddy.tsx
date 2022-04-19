@@ -57,7 +57,7 @@ const Griddy: React.FC = () => {
       setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
       setActiveChoice(-1);
     }
-  },[GRID_SIZE,toggleChoiceBox, initialized]);
+  },[GRID_SIZE, initialized]);
 
   const calculateScore = useCallback(async () => {
     const {data, error} = await griddyService.calculateScore(board);
