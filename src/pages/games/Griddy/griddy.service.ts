@@ -103,6 +103,7 @@ export default class GriddyService {
             if (wordlists[GRID_SIZE]?.indexOf(word) > -1) {
                 foundWords.push(word);
             }
+            return null;
         });
         // const { data, error } = await supabaseDataService.supabase
         // .rpc('calculate_score', {trials});
