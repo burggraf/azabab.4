@@ -1,5 +1,9 @@
 //import * as moment from 'moment';
 import SupabaseDataService from "../../../services/supabase.data.service";
+import W3 from '../../../data/3.json';
+import W4 from '../../../data/4.json';
+import W5 from '../../../data/5.json';
+import W6 from '../../../data/6.json';
 const supabaseDataService = SupabaseDataService.getInstance();
 
 export default class GriddyService {
@@ -93,31 +97,18 @@ export default class GriddyService {
         trials.push(trial);
         console.log('trials', trials);
         
-        const { data, error } = await supabaseDataService.supabase
-        .rpc('calculate_score', {trials});
-        console.log('calculate_score data, error', data, error);
+        const foundWords: string[] = [];
+        const wordlists = [[], [], [], W3, W4, W5, W6];
+        trials.map((word: string) => {
+            if (wordlists[GRID_SIZE]?.indexOf(word) > -1) {
+                foundWords.push(word);
+            }
+        });
+        // const { data, error } = await supabaseDataService.supabase
+        // .rpc('calculate_score', {trials});
+        // console.log('calculate_score data, error', data, error);
 
-        // for (let i=0; i<trials.length; i++) {
-        //     const trial = trials[i];
-        //     const { count, error } = 
-        //     await supabaseDataService.supabase
-        //     .from('words')
-        //     .select('word',{ count: 'exact' })
-        //     .eq('word', trial);
-        //     if (error) {
-        //         console.error('calculateScore error', error);
-        //         return;
-        //     } else {
-        //         if (count) {
-        //             score++;
-        //             console.log(trial, 'SCORE!', score)
-        //             successfulWords.push(trial);
-        //         } else {
-        //             console.log(trial, 'MISS!', score)
-        //         }
-        //     }
-        // }
-        return {data, error};
+        return {data: foundWords.join(', '), error: null};
     }
 
 
