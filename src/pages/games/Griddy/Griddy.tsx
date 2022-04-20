@@ -47,13 +47,7 @@ const Griddy: React.FC = () => {
     if (error) {
       console.log('griddyService.init error:', error);
     } else {
-      console.log('set q to []')
-      const q = [];
-      for (let i=0; i < (GRID_SIZE * GRID_SIZE); i++) {
-        q.push(griddyService.getRandomLetter(GRID_SIZE))
-      }
-      console.log('q is now', q)
-      setChoices(q);
+      setChoices(griddyService.getRandomQueue(GRID_SIZE));
       setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
       setActiveChoice(-1);
     }
