@@ -74,7 +74,6 @@ const Menu: React.FC = () => {
 		}
 	  },[])
 	  useEffect(() => {
-		  console.log('useEffect', user, profile, pages);
 		  if (lastUserID === user?.id) {
 			  return; // prevent looping, but looping will occur until setAppPages is finished
 		  }		  

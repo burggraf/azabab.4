@@ -22,7 +22,6 @@ const Dashboard: React.FC = () => {
 		}
 	}, [])
 	useEffect(() => {
-		console.log('useEffect', user)
 		if (user?.email) {
 			getMyInvitations(user?.email)
 		} else {

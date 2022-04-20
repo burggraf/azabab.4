@@ -43,14 +43,9 @@ const Griddy: React.FC = () => {
       return;
     }
     setInitialized(true);
-    const { error } = await griddyService.init();
-    if (error) {
-      console.log('griddyService.init error:', error);
-    } else {
       setChoices(griddyService.getRandomQueue(GRID_SIZE));
       setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
       setActiveChoice(-1);
-    }
   },[GRID_SIZE, initialized]);
 
   const calculateScore = useCallback(async () => {

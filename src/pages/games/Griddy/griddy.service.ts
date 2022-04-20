@@ -1,11 +1,11 @@
 //import * as moment from 'moment';
-import SupabaseDataService from "../../../services/supabase.data.service";
+//import SupabaseDataService from "../../../services/supabase.data.service";
 import W3 from '../../../data/3.json';
 import W4 from '../../../data/4.json';
 import W5 from '../../../data/5.json';
 import W6 from '../../../data/6.json';
 import LETTERS from '../../../data/letters.json';
-const supabaseDataService = SupabaseDataService.getInstance();
+//const supabaseDataService = SupabaseDataService.getInstance();
 
 export default class GriddyService {
     static myInstance: any = null;
@@ -19,12 +19,6 @@ export default class GriddyService {
     
     static supabase: any;
     // constructor() {}
-    static initialized = false;
-    public init = async () => {
-        console.log('GriddyService.init');
-        if (GriddyService.initialized) { return {error:null}; }
-        return { error: null };
-    }
     public getRandomLetter = (GRID_SIZE: number) => {
         const r = Math.random();
         for (let i=0; i<LETTERS.length; i++) {
