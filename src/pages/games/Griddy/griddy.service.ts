@@ -18,6 +18,14 @@ export default class GriddyService {
         return this.myInstance;
     }
     
+    static ratingScale = [
+        {},{},{},
+        {low: 0, avg: 36.9761, high: 117},
+        {low: 0, avg: 302.0534, high: 1048},
+        {low: 43, avg: 1328.8195, high: 4390},
+        {low: 357, avg: 4001.7364, high: 11488}
+    ];
+    
     static supabase: any;
     // constructor() {}
     public getRandomLetter = (GRID_SIZE: number) => {
@@ -55,7 +63,7 @@ export default class GriddyService {
         for (let i=0; i < (GRID_SIZE * GRID_SIZE); i++) {
           q.push(this.getRandomLetter(GRID_SIZE))
         }
-        console.log('rating', this.rateQueue(q, GRID_SIZE));
+        //console.log('rating', this.rateQueue(q, GRID_SIZE));
         return q;
     }
 
@@ -109,5 +117,36 @@ export default class GriddyService {
         return {data: foundWords.join(', '), error: null};
     }
 
+    public testHands = async () => {
+        const ITERATIONS = 1000;
+        const GRID_SIZES = [3, 4, 5, 6];
+        const ratings = [0, 0, 0, 0];
+        const highestRating = [0, 0, 0, 0];
+        const lowestRating = [99999, 99999, 99999, 99999];
+        const highestQueue: any[] = [[], [], [], []];
+        const lowestQueue: any[] = [[], [], [], []];
+        GRID_SIZES.map((GRID_SIZE: number) => {
+            console.log('testing GRID_SIZE', GRID_SIZE);
+            for (let i = 0; i < ITERATIONS; i++) {
+                const q = this.getRandomQueue(GRID_SIZE);
+                const rating = this.rateQueue(q, GRID_SIZE);
+                ratings[GRID_SIZE-3] += rating;
+                if (rating > highestRating[GRID_SIZE-3]) {
+                    highestRating[GRID_SIZE-3] = rating;
+                    highestQueue[GRID_SIZE-3] = q;
+                }
+                if (rating < lowestRating[GRID_SIZE-3]) {
+                    lowestRating[GRID_SIZE-3] = rating;
+                    lowestQueue[GRID_SIZE-3] = q;
+                }
+            }
+            ratings[GRID_SIZE-3] /= ITERATIONS;
+            console.log(GRID_SIZE+ ' ratings:', ratings[GRID_SIZE-3]);
+            console.log(GRID_SIZE+ ' highestRating:', highestRating[GRID_SIZE-3]);
+            console.log(GRID_SIZE+ ' highestQueue:', highestQueue[GRID_SIZE-3]);
+            console.log(GRID_SIZE+ ' lowestRating:', lowestRating[GRID_SIZE-3]);
+            console.log(GRID_SIZE+ ' lowestQueue:', lowestQueue[GRID_SIZE-3]);
+        });
+    }
 
 }
