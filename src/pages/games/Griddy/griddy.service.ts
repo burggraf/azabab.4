@@ -77,34 +77,64 @@ export default class GriddyService {
         // let successfulWords = [];
         const GRID_SIZE = board[0].length;
         const trials: string[] = [];
-        // create words across
+        // create words horizontally
         for (let i=0; i<GRID_SIZE; i++) {
+            // left to right
             let trial = '';
             for (let j=0; j<GRID_SIZE; j++) {
                 trial += board[i][j];
             }
             trials.push(trial);
+            // right to left
+            trial = '';
+            for (let j=GRID_SIZE-1; j>=0; j--) {
+                trial += board[i][j];
+            }
+            trials.push(trial);
         }
-        // create words down
+        // create words vertically
         for (let i=0; i<GRID_SIZE; i++) {
+            // down
             let trial = '';
             for (let j=0; j<GRID_SIZE; j++) {
                 trial += board[j][i];
             }
             trials.push(trial);
+            // up
+            trial = '';
+            for (let j=GRID_SIZE-1; j>=0; j--) {
+                trial += board[j][i];
+            }
+            trials.push(trial);
         }
-        // diagonal down
+        // diagonal top left to bottom right
         let trial = '';
         for (let i=0; i<GRID_SIZE; i++) {
             trial += board[i][i];
         }
         trials.push(trial);
+        // diagonal bottom left to top right
         trial = '';
-        // diagonal up
         for (let i=GRID_SIZE-1,j=0; i>=0; i--,j++) {
             trial += board[i][j];
         }
         trials.push(trial);
+
+        // diagonal top right to bottom left
+        trial = '';
+        for (let i=0,j=GRID_SIZE-1; i<GRID_SIZE; i++,j--) {
+            trial += board[i][j];
+        }
+        trials.push(trial);
+
+        // diagonal bottom right to top left
+        trial = '';
+        for (let i=GRID_SIZE-1,j=GRID_SIZE-1; i>=0; i--,j--) {
+            trial += board[i][j];
+        }
+        trials.push(trial);
+        
+
         console.log('trials', trials);
         
         const foundWords: string[] = [];
