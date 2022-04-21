@@ -20,6 +20,7 @@ const Griddy: React.FC = () => {
   const [score,setScore] = useState<number>(0)
   const [rating,setRating] = useState<any>({rating:0,low:0,high:0,avg:0})
   const [successfulWords,setSuccessfulWords] = useState<string>('')
+  const [gameNumber, setGameNumber] = useState<number>(0)
   // const { name } = useParams<{ name: string; }>();
   const toggleChoiceBox = useCallback((i:number) => {
     const item = document.getElementById(`choice${i}`);
@@ -46,7 +47,9 @@ const Griddy: React.FC = () => {
     }
     console.log('INIT');
     setInitialized(true);
-    const q = griddyService.getRandomQueue(GRID_SIZE);
+    const randomSeed = Math.floor(Math.random() * 9999999) + 1;
+    setGameNumber(randomSeed);
+    const q = griddyService.getRandomQueue(GRID_SIZE, randomSeed);
     setChoices(q);
     setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
     setActiveChoice(-1);
@@ -150,10 +153,10 @@ const Griddy: React.FC = () => {
                       interfaceOptions={ {header: 'Grid Size'} }
                       onIonChange={(e: any) => {setGRID_SIZE(parseInt(e.detail.value,10));reset(parseInt(e.detail.value,10));}}
                       placeholder={GRID_SIZE.toString()}>
-              <IonSelectOption value="3">3 x 3</IonSelectOption>
-              <IonSelectOption value="4">4 x 4</IonSelectOption>
-              <IonSelectOption value="5">5 x 5</IonSelectOption>
-              <IonSelectOption value="6">6 x 6</IonSelectOption>
+              <IonSelectOption value={3}>3 x 3</IonSelectOption>
+              <IonSelectOption value={4}>4 x 4</IonSelectOption>
+              <IonSelectOption value={5}>5 x 5</IonSelectOption>
+              <IonSelectOption value={6}>6 x 6</IonSelectOption>
             </IonSelect>
             <IonButton color='primary' onClick={() => {reset();}}>
 							<IonIcon size='large' icon={refreshCircleOutline}></IonIcon>
@@ -198,6 +201,7 @@ const Griddy: React.FC = () => {
         </div>
         <div>
           <br/>
+          GAME NUMBER: {gameNumber}<br/>
           LOW: {rating.low}<br/>
           AVG: {rating.avg}<br/>
           RATING: <b>{rating?.rating}</b><br/>

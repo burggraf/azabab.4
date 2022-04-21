@@ -6,6 +6,8 @@ import W5 from '../../../data/5.json';
 import W6 from '../../../data/6.json';
 import LETTERS from '../../../data/letters.json';
 //const supabaseDataService = SupabaseDataService.getInstance();
+import seedrandom from 'seedrandom';
+
 const wordlists = [[], [], [], W3, W4, W5, W6];
 
 export default class GriddyService {
@@ -28,8 +30,8 @@ export default class GriddyService {
     
     static supabase: any;
     // constructor() {}
-    public getRandomLetter = (GRID_SIZE: number) => {
-        const r = Math.random();
+    public getRandomLetter = (GRID_SIZE: number, rng: any) => {
+        const r = rng(); // Math.random();
         for (let i=0; i<LETTERS.length; i++) {
             if (r < LETTERS[i].cutoff && LETTERS[i].wordlength === GRID_SIZE) {
                 return LETTERS[i].letter;
@@ -59,10 +61,11 @@ export default class GriddyService {
         const scale = GriddyService.ratingScale[GRID_SIZE];        
         return {rating, low: scale.low, avg: scale.avg, high: scale.high};
     }
-    public getRandomQueue = (GRID_SIZE: number) => {
+    public getRandomQueue = (GRID_SIZE: number, seed: number) => {
+        const rng = seedrandom((seed).toString());
         const q = [];
         for (let i=0; i < (GRID_SIZE * GRID_SIZE); i++) {
-          q.push(this.getRandomLetter(GRID_SIZE))
+          q.push(this.getRandomLetter(GRID_SIZE, rng))
         }
         //console.log('rating', this.rateQueue(q, GRID_SIZE));
         return q;
