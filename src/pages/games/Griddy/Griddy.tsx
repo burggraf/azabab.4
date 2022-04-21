@@ -153,6 +153,10 @@ const Griddy: React.FC = () => {
       console.log('skip additional resets');
       return;
     }
+    if (activeChoice > -1) {
+      clearChoiceBox(activeChoice);
+      activeChoice = -1;
+    }
     resetting = true;
     setInitialized(false);
     console.log('reset');
