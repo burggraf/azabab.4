@@ -18,6 +18,7 @@ const Griddy: React.FC = () => {
   const [activeChoice,setActiveChoice] = useState<number>(-1)
   const [board,setBoard] = useState<string[][]>([])
   const [score,setScore] = useState<number>(0)
+  const [rating,setRating] = useState<any>({rating:0,low:0,high:0,avg:0})
   const [successfulWords,setSuccessfulWords] = useState<string>('')
   // const { name } = useParams<{ name: string; }>();
   const toggleChoiceBox = useCallback((i:number) => {
@@ -52,7 +53,7 @@ const Griddy: React.FC = () => {
     setTimeout(()=> {
       resetting = false;
     }, 250);
-    console.log(`rating: ${await griddyService.rateQueue(q,GRID_SIZE)}`);
+    setRating(griddyService.rateQueue(q,GRID_SIZE));
   },[GRID_SIZE, initialized]);
 
   const calculateScore = useCallback(async () => {
@@ -194,6 +195,13 @@ const Griddy: React.FC = () => {
         <div>
           SCORE: {score}<br/>
           WORDS: {successfulWords}<br/>
+        </div>
+        <div>
+          <br/>
+          LOW: {rating.low}<br/>
+          AVG: {rating.avg}<br/>
+          RATING: <b>{rating?.rating}</b><br/>
+          HIGH: {rating.high}
         </div>
         {/* <pre>activeChoice: {activeChoice}</pre>
         <pre>board: {JSON.stringify(board)}</pre>
