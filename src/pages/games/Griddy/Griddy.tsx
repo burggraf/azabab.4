@@ -132,13 +132,21 @@ const Griddy: React.FC = () => {
     setBoard(newBoard);
     clearChoiceBox(activeChoice);
     choices[activeChoice] = '';
-    activeChoice = -1;
-    for (let i=0; i<choices.length; i++) {
+    for (let i=activeChoice; i<choices.length; i++) {
       if (choices[i] !== '') {
+        activeChoice = -1;
         toggleChoiceBox(i);
         return;
       }
     }
+    for (let i=0; i<choices.length; i++) {
+      if (choices[i] !== '') {
+        activeChoice = -1;
+        toggleChoiceBox(i);
+        return;
+      }
+    }
+    activeChoice = -1;
   }
   const reset = async (newSize: number = GRID_SIZE) => {
     if (resetting) {
