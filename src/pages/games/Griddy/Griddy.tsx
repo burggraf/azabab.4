@@ -9,37 +9,45 @@ import './Griddy.css';
 import { refreshCircleOutline } from 'ionicons/icons';
 const griddyService = GriddyService.getInstance();
 let resetting = false;
+let activeChoice = -1;
 
 const Griddy: React.FC = () => {
   //const GRID_SIZE = 4;
   const [initialized, setInitialized] = useState(false);
   const [GRID_SIZE, setGRID_SIZE] = useState(4);
   const [choices,setChoices] = useState<string[]>([])
-  const [activeChoice,setActiveChoice] = useState<number>(-1)
   const [board,setBoard] = useState<string[][]>([])
   const [score,setScore] = useState<number>(0)
   const [rating,setRating] = useState<any>({rating:0,low:0,high:0,avg:0})
   const [successfulWords,setSuccessfulWords] = useState<string>('')
   const [gameNumber, setGameNumber] = useState<number>(0)
   // const { name } = useParams<{ name: string; }>();
-  const toggleChoiceBox = useCallback((i:number) => {
+  const clearChoiceBox = (i: number) => {
     const item = document.getElementById(`choice${i}`);
+    item?.classList.remove('selected');
+  }
+  const toggleChoiceBox = (i:number) => {
+    console.log('toggleChoiceBox',i);
+    const item = document.getElementById(`choice${i}`);
+    console.log('item.innerText',item?.innerText);
+    console.log('activeChoice', activeChoice);
     if (item?.innerText === '') { // (choices[i] === '') {
       return;
     }
     if (activeChoice === i) {
       item?.classList.toggle('selected');
-      setActiveChoice(-1);
+      activeChoice = -1;
     } else if (activeChoice > -1) {
       const oldItem = document.getElementById(`choice${activeChoice}`);
       oldItem?.classList.toggle('selected');
       item?.classList.toggle('selected');
-      setActiveChoice(i);  
+      activeChoice = i;  
     } else {
       item?.classList.toggle('selected');
-      setActiveChoice(i);  
+      activeChoice = i;  
     }
-  },[activeChoice]);
+    console.log('activeChoice is now', activeChoice);
+  };
 
   const init = useCallback(async () => {
     if (initialized) {
@@ -52,7 +60,7 @@ const Griddy: React.FC = () => {
     const q = griddyService.getRandomQueue(GRID_SIZE, randomSeed);
     setChoices(q);
     setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
-    setActiveChoice(-1);
+    activeChoice = -1;
     setTimeout(()=> {
       resetting = false;
     }, 250);
@@ -107,6 +115,8 @@ const Griddy: React.FC = () => {
   }
 
   const placeChoice = (row: number, col: number) => {
+    console.log('placeChoice', row, col);
+    console.log('activeChoice', activeChoice);
     if (board[row][col] !== '') {
       console.log('placeChoice: already filled, calling unplaceChoice');
       unplaceChoice(row, col);
@@ -120,9 +130,15 @@ const Griddy: React.FC = () => {
     const newBoard = [...board];
     newBoard[row][col] = choice;
     setBoard(newBoard);
-    toggleChoiceBox(activeChoice);
+    clearChoiceBox(activeChoice);
     choices[activeChoice] = '';
-    setActiveChoice(-1);
+    activeChoice = -1;
+    for (let i=0; i<choices.length; i++) {
+      if (choices[i] !== '') {
+        toggleChoiceBox(i);
+        return;
+      }
+    }
   }
   const reset = async (newSize: number = GRID_SIZE) => {
     if (resetting) {
