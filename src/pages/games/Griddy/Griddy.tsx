@@ -86,9 +86,26 @@ const Griddy: React.FC = () => {
     }
   },[choices, calculateScore, board, GRID_SIZE])
 
+  const unplaceChoice = (row: number, col: number) => {
+    console.log('unplaceChoice', row, col);
+    const letter = board[row][col];
+    const newBoard = [...board];
+    newBoard[row][col] = '';
+    setBoard(newBoard);
+    const newChoices = [...choices];
+    for (let i=0; i<newChoices.length; i++) {
+      if (newChoices[i] === '') {
+        newChoices[i] = letter;
+        setChoices(newChoices);
+        return;
+      }
+    }
+  }
+
   const placeChoice = (row: number, col: number) => {
     if (board[row][col] !== '') {
-      console.log('placeChoice: already filled');
+      console.log('placeChoice: already filled, calling unplaceChoice');
+      unplaceChoice(row, col);
       return;
     }
     if (activeChoice === -1) {
