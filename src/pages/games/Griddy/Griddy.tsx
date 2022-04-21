@@ -68,7 +68,7 @@ const Griddy: React.FC = () => {
   },[GRID_SIZE, initialized]);
 
   const calculateScore = useCallback(async () => {
-    const {data, error} = await griddyService.calculateScore(board);
+    const {data, indexes, error} = await griddyService.calculateScore(board);
     console.log('griddyService.calculateScore', data, error);
     if (error) {
       console.error('calculateScore error:', error);

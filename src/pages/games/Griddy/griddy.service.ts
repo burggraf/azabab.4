@@ -134,13 +134,14 @@ export default class GriddyService {
         }
         trials.push(trial);
         
-
         console.log('trials', trials);
         
         const foundWords: string[] = [];
-        trials.map((word: string) => {
+        const foundIndexes: number[] = [];
+        trials.map((word: string, index: number) => {
             if (wordlists[GRID_SIZE]?.indexOf(word) > -1) {
                 foundWords.push(word);
+                foundIndexes.push(index);
             }
             return null;
         });
@@ -148,7 +149,7 @@ export default class GriddyService {
         // .rpc('calculate_score', {trials});
         // console.log('calculate_score data, error', data, error);
 
-        return {data: foundWords.join(', '), error: null};
+        return {data: foundWords.join(', '), indexes: foundIndexes, error: null};
     }
 
     // public testHands = async () => {
