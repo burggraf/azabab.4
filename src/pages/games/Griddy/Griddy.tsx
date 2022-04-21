@@ -8,6 +8,7 @@ import GriddyService from './griddy.service';
 import './Griddy.css';
 import { refreshCircleOutline } from 'ionicons/icons';
 const griddyService = GriddyService.getInstance();
+let resetting = false;
 
 const Griddy: React.FC = () => {
   //const GRID_SIZE = 4;
@@ -42,10 +43,16 @@ const Griddy: React.FC = () => {
     if (initialized) {
       return;
     }
+    console.log('INIT');
     setInitialized(true);
-      setChoices(griddyService.getRandomQueue(GRID_SIZE));
-      setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
-      setActiveChoice(-1);
+    const q = griddyService.getRandomQueue(GRID_SIZE);
+    setChoices(q);
+    setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
+    setActiveChoice(-1);
+    setTimeout(()=> {
+      resetting = false;
+    }, 250);
+    console.log(`rating: ${await griddyService.rateQueue(q,GRID_SIZE)}`);
   },[GRID_SIZE, initialized]);
 
   const calculateScore = useCallback(async () => {
@@ -97,6 +104,11 @@ const Griddy: React.FC = () => {
     setActiveChoice(-1);
   }
   const reset = async (newSize: number = GRID_SIZE) => {
+    if (resetting) {
+      console.log('skip additional resets');
+      return;
+    }
+    resetting = true;
     setInitialized(false);
     console.log('reset');
     // setBoard([...Array(newSize)].map(x=>Array(newSize).fill('')));
