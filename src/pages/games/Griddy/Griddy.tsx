@@ -18,7 +18,7 @@ const Griddy: React.FC = () => {
   const [choices,setChoices] = useState<string[]>([])
   const [board,setBoard] = useState<string[][]>([])
   const [score,setScore] = useState<number>(0)
-  const [scoreboxes,setScoreboxes] = useState<any[]>([])
+  const [wordPointers,setWordPointers] = useState<number[]>([])
   const [rating,setRating] = useState<any>({rating:0,low:0,high:0,avg:0})
   const [successfulWords,setSuccessfulWords] = useState<string>('')
   const [gameNumber, setGameNumber] = useState<number>(0)
@@ -61,12 +61,12 @@ const Griddy: React.FC = () => {
     const q = griddyService.getRandomQueue(GRID_SIZE, randomSeed);
     setChoices(q);
     setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
-    setScoreboxes([...Array((GRID_SIZE * GRID_SIZE) + 4)].map(x=>null))
     activeChoice = -1;
     setTimeout(()=> {
       resetting = false;
     }, 250);
     setRating(griddyService.rateQueue(q,GRID_SIZE));
+    setWordPointers([]);
   },[GRID_SIZE, initialized]);
 
   const calculateScore = useCallback(async () => {
@@ -83,15 +83,11 @@ const Griddy: React.FC = () => {
         setSuccessfulWords('none found');    
       }
       if (indexes) {
-        const newScoreBoxes = [...scoreboxes];
-        indexes.forEach((i: number) => {
-          console.log('WINNER index found:', i);
-          newScoreBoxes[i] = 1;
-        });
-        setScoreboxes(newScoreBoxes);
+        setWordPointers(indexes);
       }
     }
   }, [board]);
+
 
   useEffect(() => {
     init();
@@ -233,7 +229,7 @@ const Griddy: React.FC = () => {
             (
               <IonCol key={`scoreboxes-${i}${el}`} 
                   id={`scoreboxes-${i}${el}`} className="scoringbox">
-                    {scoreboxes[i] && 
+                    {(wordPointers.indexOf(i) > -1) && 
                       <IonIcon icon={arrowForwardOutline}
                       className={scoreboxContent[GRID_SIZE][i]}>
                       </IonIcon>}
@@ -245,7 +241,7 @@ const Griddy: React.FC = () => {
 
                 <IonCol key={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex}`} 
                     id={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex}`} className="scoringbox">
-                      {scoreboxes[GRID_SIZE + 2 + rowIndex + rowIndex] && 
+                      {(wordPointers.indexOf(GRID_SIZE + 2 + rowIndex + rowIndex) > -1) && 
                       <IonIcon icon={arrowForwardOutline}
                       className={scoreboxContent[GRID_SIZE][GRID_SIZE + 2 + rowIndex + rowIndex]}>
                       </IonIcon>}
@@ -260,7 +256,7 @@ const Griddy: React.FC = () => {
 
                 <IonCol key={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex + 1}`} 
                     id={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex + 1}`} className="scoringbox">
-                      {scoreboxes[GRID_SIZE + 2 + rowIndex + rowIndex + 1] && 
+                      {(wordPointers.indexOf(GRID_SIZE + 2 + rowIndex + rowIndex + 1) > -1) && 
                       <IonIcon icon={arrowForwardOutline}
                       className={scoreboxContent[GRID_SIZE][GRID_SIZE + 2 + rowIndex + rowIndex + 1]}>
                       </IonIcon>}
@@ -274,7 +270,7 @@ const Griddy: React.FC = () => {
             (
               <IonCol key={`scoreboxes-${(GRID_SIZE * 3) + 2 + i}${el}`} 
                   id={`scoreboxes-${(GRID_SIZE * 3) + 2 + i}${el}`} className="scoringbox">
-                    {scoreboxes[(GRID_SIZE * 3) + 2 + i] && 
+                    {(wordPointers.indexOf((GRID_SIZE * 3) + 2 + i) > -1) && 
                       <IonIcon icon={arrowForwardOutline}
                       className={scoreboxContent[GRID_SIZE][(GRID_SIZE * 3) + 2 + i]}>
                       </IonIcon>}
