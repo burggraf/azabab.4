@@ -18,6 +18,7 @@ const Griddy: React.FC = () => {
   const [choices,setChoices] = useState<string[]>([])
   const [board,setBoard] = useState<string[][]>([])
   const [score,setScore] = useState<number>(0)
+  const [scoreboxes,setScoreboxes] = useState<string[]>([])
   const [rating,setRating] = useState<any>({rating:0,low:0,high:0,avg:0})
   const [successfulWords,setSuccessfulWords] = useState<string>('')
   const [gameNumber, setGameNumber] = useState<number>(0)
@@ -60,6 +61,7 @@ const Griddy: React.FC = () => {
     const q = griddyService.getRandomQueue(GRID_SIZE, randomSeed);
     setChoices(q);
     setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
+    setScoreboxes([...Array((GRID_SIZE * GRID_SIZE) + 4)].map(x=>''))
     activeChoice = -1;
     setTimeout(()=> {
       resetting = false;
@@ -212,16 +214,46 @@ const Griddy: React.FC = () => {
         </div>
         <div className="centeredDiv">
         <IonGrid style={{width: '100%'}}>
+            <IonRow key={`scoringrow-top`}>
+            {Array(GRID_SIZE+2).fill('').map((el, i) =>
+            (
+              <IonCol key={`scoreboxes-${i}${el}`} 
+                  id={`scoreboxes-${i}${el}`} className="scoringbox">
+                    {i}
+              </IonCol>
+            ))}
+            </IonRow>
             {board.map((row, rowIndex) => (
               <IonRow key={`row-${rowIndex}`}>
+
+                <IonCol key={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex}`} 
+                    id={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex}`} className="scoringbox">
+                      {GRID_SIZE + 2 + rowIndex + rowIndex}
+                </IonCol>
+
                 {row.map((col, colIndex) => (
                   <IonCol className="boxed" id={`cell-${rowIndex}-${colIndex}`} 
                     key={`cell-${rowIndex}-${colIndex}`}
                     onClick={() => placeChoice(rowIndex, colIndex)}
                   >{col}</IonCol>
                 ))}
+
+                <IonCol key={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex + 1}`} 
+                    id={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex + 1}`} className="scoringbox">
+                      {GRID_SIZE + 2 + rowIndex + rowIndex + 1}
+                </IonCol>
+
               </IonRow>
             ))}
+            <IonRow key={`scoringrow-bottom`}>
+            {Array(GRID_SIZE+2).fill('').map((el, i) =>
+            (
+              <IonCol key={`scoreboxes-${(GRID_SIZE * 3) + 2 + i}${el}`} 
+                  id={`scoreboxes-${(GRID_SIZE * 3) + 2 + i}${el}`} className="scoringbox">
+                    {(GRID_SIZE * 3) + 2 + i}
+              </IonCol>
+            ))}
+            </IonRow>
         </IonGrid>
         </div>
         <div>

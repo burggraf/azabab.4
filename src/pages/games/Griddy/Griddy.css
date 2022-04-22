@@ -82,6 +82,38 @@
     justify-content: center; /* Horizontal center alignment */
 
 }
+.scoringbox {
+    border: 1px solid;
+    /* height: 100px;
+    width: 100px;
+    max-width: 100px; */
+
+
+    /* min-height: 50px;
+    min-width: 50px; */
+    padding: 5px;
+    width: 50px;
+    max-width: 50px;
+    min-width: 50px;
+    height: 50px;
+    max-height: 50px;
+    min-height: 50px;
+    margin: 5px;
+    
+    /* line-height: 50px; */
+  
+    background-color: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+    
+    font-size: 28pt;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center; /* Vertical center alignment */
+    justify-content: center; /* Horizontal center alignment */
+
+}
+
 .centeredDiv {
     display: flex;
     justify-content: center; /* Horizontal center alignment */
