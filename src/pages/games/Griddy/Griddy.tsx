@@ -6,7 +6,7 @@ import GriddyService from './griddy.service';
 //import { useParams } from 'react-router';
 //import ExploreContainer from '../components/ExploreContainer';
 import './Griddy.css';
-import { refreshCircleOutline } from 'ionicons/icons';
+import { arrowForwardOutline, refreshCircleOutline } from 'ionicons/icons';
 const griddyService = GriddyService.getInstance();
 let resetting = false;
 let activeChoice = -1;
@@ -165,6 +165,12 @@ const Griddy: React.FC = () => {
     // setBoard([...Array(newSize)].map(x=>Array(newSize).fill('')));
     init();
   }
+  const scoreboxContent = [[],[],[],
+    ['southwest','south','south','south','southeast','west','east','west','east','west','east','northeast','north','north','north','northwest'],
+    ['southwest','south','south','south','south','southeast','west','east','west','east','west','east','west','east','northeast','north','north','north','north','northwest'],
+    [],
+    []
+  ]
 
   return (
     <IonPage>
@@ -219,7 +225,10 @@ const Griddy: React.FC = () => {
             (
               <IonCol key={`scoreboxes-${i}${el}`} 
                   id={`scoreboxes-${i}${el}`} className="scoringbox">
-                    {scoreboxes[i]}
+                    {scoreboxes[i] && 
+                      <IonIcon icon={arrowForwardOutline}
+                      className={scoreboxContent[GRID_SIZE][i]}>
+                      </IonIcon>}
               </IonCol>
             ))}
             </IonRow>
@@ -228,7 +237,10 @@ const Griddy: React.FC = () => {
 
                 <IonCol key={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex}`} 
                     id={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex}`} className="scoringbox">
-                      {scoreboxes[GRID_SIZE + 2 + rowIndex + rowIndex]}
+                      {scoreboxes[GRID_SIZE + 2 + rowIndex + rowIndex] && 
+                      <IonIcon icon={arrowForwardOutline}
+                      className={scoreboxContent[GRID_SIZE][GRID_SIZE + 2 + rowIndex + rowIndex]}>
+                      </IonIcon>}
                 </IonCol>
 
                 {row.map((col, colIndex) => (
@@ -240,7 +252,11 @@ const Griddy: React.FC = () => {
 
                 <IonCol key={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex + 1}`} 
                     id={`scoreboxes-${GRID_SIZE + 2 + rowIndex + rowIndex + 1}`} className="scoringbox">
-                      {scoreboxes[GRID_SIZE + 2 + rowIndex + rowIndex + 1]}
+                      {scoreboxes[GRID_SIZE + 2 + rowIndex + rowIndex + 1] && 
+                      <IonIcon icon={arrowForwardOutline}
+                      className={scoreboxContent[GRID_SIZE][GRID_SIZE + 2 + rowIndex + rowIndex + 1]}>
+                      </IonIcon>}
+
                 </IonCol>
 
               </IonRow>
@@ -250,7 +266,11 @@ const Griddy: React.FC = () => {
             (
               <IonCol key={`scoreboxes-${(GRID_SIZE * 3) + 2 + i}${el}`} 
                   id={`scoreboxes-${(GRID_SIZE * 3) + 2 + i}${el}`} className="scoringbox">
-                    {scoreboxes[(GRID_SIZE * 3) + 2 + i]}
+                    {scoreboxes[(GRID_SIZE * 3) + 2 + i] && 
+                      <IonIcon icon={arrowForwardOutline}
+                      className={scoreboxContent[GRID_SIZE][(GRID_SIZE * 3) + 2 + i]}>
+                      </IonIcon>}
+
               </IonCol>
             ))}
             </IonRow>
