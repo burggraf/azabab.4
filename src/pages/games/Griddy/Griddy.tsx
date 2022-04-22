@@ -99,8 +99,15 @@ const Griddy: React.FC = () => {
     if (board.length === 0) {
       return;
     }
-    if (choices.join('').length === 0 && board[GRID_SIZE-1][GRID_SIZE-1] !== '') {
-      calculateScore();
+    try {
+      if (choices.join('').length === 0 && board[GRID_SIZE-1][GRID_SIZE-1] !== '') {
+        calculateScore();
+      }  
+    } catch (err) {
+      // console.error('calculateScore error:', err);
+      setScore(0);
+      setSuccessfulWords('');    
+
     }
   },[choices, calculateScore, board, GRID_SIZE])
 
