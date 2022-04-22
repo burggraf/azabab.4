@@ -108,7 +108,7 @@
 
 }
 .scoringbox {
-    border: 1px solid;
+    /* border: 1px solid; */
     /* height: 100px;
     width: 100px;
     max-width: 100px; */
@@ -127,8 +127,8 @@
     
     /* line-height: 50px; */
   
-    background-color: var(--ion-color-primary);
-    color: var(--ion-color-primary-contrast);
+    background-color: transparent;
+    color: var(--ion-color-primary);
     
     font-size: 28pt;
     font-weight: bold;

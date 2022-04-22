@@ -76,11 +76,35 @@ export default class GriddyService {
         // let score = 0;
         // let successfulWords = [];
         const GRID_SIZE = board[0].length;
+        let trial = '';
         const trials: string[] = [];
-        // create words horizontally
+
+        // diagonal top left to bottom right
+        trial = '';
+        for (let i=0; i<GRID_SIZE; i++) {
+            trial += board[i][i];
+        }
+        trials.push(trial);
+
+        for (let i=0; i<GRID_SIZE; i++) {
+            // down
+            trial = '';
+            for (let j=0; j<GRID_SIZE; j++) {
+                trial += board[j][i];
+            }
+            trials.push(trial);
+        }
+
+        // diagonal top right to bottom left
+        trial = '';
+        for (let i=0,j=GRID_SIZE-1; i<GRID_SIZE; i++,j--) {
+            trial += board[i][j];
+        }
+        trials.push(trial);
+
         for (let i=0; i<GRID_SIZE; i++) {
             // left to right
-            let trial = '';
+            trial = '';
             for (let j=0; j<GRID_SIZE; j++) {
                 trial += board[i][j];
             }
@@ -92,27 +116,7 @@ export default class GriddyService {
             }
             trials.push(trial);
         }
-        // create words vertically
-        for (let i=0; i<GRID_SIZE; i++) {
-            // down
-            let trial = '';
-            for (let j=0; j<GRID_SIZE; j++) {
-                trial += board[j][i];
-            }
-            trials.push(trial);
-            // up
-            trial = '';
-            for (let j=GRID_SIZE-1; j>=0; j--) {
-                trial += board[j][i];
-            }
-            trials.push(trial);
-        }
-        // diagonal top left to bottom right
-        let trial = '';
-        for (let i=0; i<GRID_SIZE; i++) {
-            trial += board[i][i];
-        }
-        trials.push(trial);
+
         // diagonal bottom left to top right
         trial = '';
         for (let i=GRID_SIZE-1,j=0; i>=0; i--,j++) {
@@ -120,12 +124,14 @@ export default class GriddyService {
         }
         trials.push(trial);
 
-        // diagonal top right to bottom left
-        trial = '';
-        for (let i=0,j=GRID_SIZE-1; i<GRID_SIZE; i++,j--) {
-            trial += board[i][j];
+        for (let i=0; i<GRID_SIZE; i++) {
+            // up
+            trial = '';
+            for (let j=GRID_SIZE-1; j>=0; j--) {
+                trial += board[j][i];
+            }
+            trials.push(trial);
         }
-        trials.push(trial);
 
         // diagonal bottom right to top left
         trial = '';

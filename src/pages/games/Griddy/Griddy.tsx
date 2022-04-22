@@ -18,7 +18,7 @@ const Griddy: React.FC = () => {
   const [choices,setChoices] = useState<string[]>([])
   const [board,setBoard] = useState<string[][]>([])
   const [score,setScore] = useState<number>(0)
-  const [scoreboxes,setScoreboxes] = useState<number[]>([])
+  const [scoreboxes,setScoreboxes] = useState<any[]>([])
   const [rating,setRating] = useState<any>({rating:0,low:0,high:0,avg:0})
   const [successfulWords,setSuccessfulWords] = useState<string>('')
   const [gameNumber, setGameNumber] = useState<number>(0)
@@ -61,7 +61,7 @@ const Griddy: React.FC = () => {
     const q = griddyService.getRandomQueue(GRID_SIZE, randomSeed);
     setChoices(q);
     setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
-    setScoreboxes([...Array((GRID_SIZE * GRID_SIZE) + 4)].map(x=>1))
+    setScoreboxes([...Array((GRID_SIZE * GRID_SIZE) + 4)].map(x=>null))
     activeChoice = -1;
     setTimeout(()=> {
       resetting = false;
@@ -81,6 +81,14 @@ const Griddy: React.FC = () => {
       } else {
         setScore(0);
         setSuccessfulWords('none found');    
+      }
+      if (indexes) {
+        const newScoreBoxes = [...scoreboxes];
+        indexes.forEach((i: number) => {
+          console.log('WINNER index found:', i);
+          newScoreBoxes[i] = 1;
+        });
+        setScoreboxes(newScoreBoxes);
       }
     }
   }, [board]);
@@ -168,8 +176,8 @@ const Griddy: React.FC = () => {
   const scoreboxContent = [[],[],[],
     ['southwest','south','south','south','southeast','west','east','west','east','west','east','northeast','north','north','north','northwest'],
     ['southwest','south','south','south','south','southeast','west','east','west','east','west','east','west','east','northeast','north','north','north','north','northwest'],
-    [],
-    []
+    ['southwest','south','south','south','south','south','southeast','west','east','west','east','west','east','west','east','west','east','northeast','north','north','north','north','north','northwest'],
+    ['southwest','south','south','south','south','south','south','southeast','west','east','west','east','west','east','west','east','west','east','west','east','northeast','north','north','north','north','north','north','northwest'],
   ]
 
   return (
