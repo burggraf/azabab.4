@@ -213,9 +213,10 @@ const Griddy: React.FC = () => {
         <div className="centeredDiv">
         <IonGrid style={{width: '100%'}}>
             {board.map((row, rowIndex) => (
-              <IonRow>
+              <IonRow key={`row-${rowIndex}`}>
                 {row.map((col, colIndex) => (
-                  <IonCol className="boxed"
+                  <IonCol className="boxed" id={`cell-${rowIndex}-${colIndex}`} 
+                    key={`cell-${rowIndex}-${colIndex}`}
                     onClick={() => placeChoice(rowIndex, colIndex)}
                   >{col}</IonCol>
                 ))}
