@@ -111,6 +111,13 @@ const Griddy: React.FC = () => {
     }
   },[choices, calculateScore, board, GRID_SIZE])
 
+  useEffect(() => {
+    if (board.length === 0) {
+      return;
+    }
+    calculateScore();
+  },[board])
+
   const unplaceChoice = (row: number, col: number) => {
     console.log('unplaceChoice', row, col);
     const letter = board[row][col];

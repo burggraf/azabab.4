@@ -84,6 +84,7 @@ export default class GriddyService {
         for (let i=0; i<GRID_SIZE; i++) {
             trial += board[i][i];
         }
+        if (trial.length !== GRID_SIZE) trial = '';
         trials.push(trial);
 
         for (let i=0; i<GRID_SIZE; i++) {
@@ -92,6 +93,7 @@ export default class GriddyService {
             for (let j=0; j<GRID_SIZE; j++) {
                 trial += board[j][i];
             }
+            if (trial.length !== GRID_SIZE) trial = '';
             trials.push(trial);
         }
 
@@ -100,6 +102,7 @@ export default class GriddyService {
         for (let i=0,j=GRID_SIZE-1; i<GRID_SIZE; i++,j--) {
             trial += board[i][j];
         }
+        if (trial.length !== GRID_SIZE) trial = '';
         trials.push(trial);
 
         for (let i=0; i<GRID_SIZE; i++) {
@@ -114,6 +117,7 @@ export default class GriddyService {
             for (let j=GRID_SIZE-1; j>=0; j--) {
                 trial += board[i][j];
             }
+            if (trial.length !== GRID_SIZE) trial = '';
             trials.push(trial);
         }
 
@@ -122,6 +126,7 @@ export default class GriddyService {
         for (let i=GRID_SIZE-1,j=0; i>=0; i--,j++) {
             trial += board[i][j];
         }
+        if (trial.length !== GRID_SIZE) trial = '';
         trials.push(trial);
 
         for (let i=0; i<GRID_SIZE; i++) {
@@ -130,6 +135,7 @@ export default class GriddyService {
             for (let j=GRID_SIZE-1; j>=0; j--) {
                 trial += board[j][i];
             }
+            if (trial.length !== GRID_SIZE) trial = '';
             trials.push(trial);
         }
 
@@ -138,6 +144,7 @@ export default class GriddyService {
         for (let i=GRID_SIZE-1,j=GRID_SIZE-1; i>=0; i--,j--) {
             trial += board[i][j];
         }
+        if (trial.length !== GRID_SIZE) trial = '';
         trials.push(trial);
         
         console.log('trials', trials);
@@ -145,7 +152,7 @@ export default class GriddyService {
         const foundWords: string[] = [];
         const foundIndexes: number[] = [];
         trials.map((word: string, index: number) => {
-            if (wordlists[GRID_SIZE]?.indexOf(word) > -1) {
+            if (wordlists[GRID_SIZE].length && wordlists[GRID_SIZE]?.indexOf(word) > -1) {
                 foundWords.push(word);
                 foundIndexes.push(index);
             }
