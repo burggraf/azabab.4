@@ -95,28 +95,34 @@ const Griddy: React.FC = () => {
 		}
 	}, [init]);
 
+  // useEffect(() => {
+  //   if (board.length === 0) {
+  //     return;
+  //   }
+  //   try {
+  //     if (choices.join('').length === 0 && board[GRID_SIZE-1][GRID_SIZE-1] !== '') {
+  //       calculateScore();
+  //     }  
+  //   } catch (err) {
+  //     // console.error('calculateScore error:', err);
+  //     setScore(0);
+  //     setSuccessfulWords('');    
+
+  //   }
+  // },[choices, calculateScore, board, GRID_SIZE])
+
   useEffect(() => {
     if (board.length === 0) {
       return;
     }
     try {
-      if (choices.join('').length === 0 && board[GRID_SIZE-1][GRID_SIZE-1] !== '') {
-        calculateScore();
-      }  
+      calculateScore();
     } catch (err) {
-      // console.error('calculateScore error:', err);
+      console.error('calculateScore error:', err);
       setScore(0);
       setSuccessfulWords('');    
-
     }
-  },[choices, calculateScore, board, GRID_SIZE])
-
-  useEffect(() => {
-    if (board.length === 0) {
-      return;
-    }
-    calculateScore();
-  },[board])
+  },[board, calculateScore])
 
   const unplaceChoice = (row: number, col: number) => {
     console.log('unplaceChoice', row, col);
