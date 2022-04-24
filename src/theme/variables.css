@@ -10,6 +10,17 @@ input.native-input {
 }
 /** Ionic CSS Variables **/
 :root {
+  /* --xpadding: 5px;
+  --xmargin: 5px;
+  --xsize: 35px;
+  --xfont: 20pt;
+
+  --xpadding3: 5px;
+  --xmargin3: 5px;
+  --xsize3: 50px;
+  --xfont3: 28pt;
+ */
+
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;

@@ -1,3 +1,41 @@
+/* :root {
+    
+    --xpadding: 5px;
+    --xmargin: 5px;
+    --xsize: 35px;
+    --xfont: 20pt;    
+
+    --xpadding3: 5px;
+    --xmargin3: 5px;
+    --xsize3: 50px;
+    --xfont3: 28pt;      
+
+} */
+.gridsize3 {
+    --xpadding: 5px;
+    --xmargin: 5px;
+    --xsize: 60px;
+    --xfont: 29pt;      
+}
+.gridsize4 {
+    --xpadding: 5px;
+    --xmargin: 5px;
+    --xsize: 50px;
+    --xfont: 26pt;      
+}
+.gridsize5 {
+    --xpadding: 5px;
+    --xmargin: 5px;
+    --xsize: 42px;
+    --xfont: 23pt;      
+}
+.gridsize6 {
+    --xpadding: 5px;
+    --xmargin: 5px;
+    --xsize: 35px;
+    --xfont: 20pt;    
+}
+
 .west {
     transform: rotate(0deg);    
 }
@@ -25,19 +63,19 @@
 
 .flex-item {
   /* background-color: tomato; */
-  padding: 5px;
-  width: 50px;
-  max-width: 50px;
-  min-width: 50px;
-  height: 50px;
-  max-height: 50px;
-  min-height: 50px;
-  margin: 5px;
+  padding: var(--xpadding);
+  width: var(--xsize);
+  max-width: var(--xsize);
+  min-width: var(--xsize);
+  height: var(--xsize);
+  max-height: var(--xsize);
+  min-height: var(--xsize);
+  margin: var(--xmargin);
   
-  line-height: 50px;
+  /* line-height: var(--xsize); */
   color: var(--ion-color-dark);
   font-weight: bold;
-  font-size: 2em;
+  font-size: var(--xfont);/*2em;*/
   text-align: center;
     /* border: 1px solid;
     border-color: var(--ion-color-dark); */
@@ -66,9 +104,9 @@
     /* height: 100px;
     width: 100px;
     max-width: 100px; */
-    height: 50px;
-    width: 50px;
-    font-size: 28pt;
+    height: var(--xsize);
+    width: var(--xsize);
+    font-size: var(--xfont);
     font-weight: bold;
 
     display: flex;
@@ -83,23 +121,23 @@
     max-width: 100px; */
 
 
-    /* min-height: 50px;
-    min-width: 50px; */
-    padding: 5px;
-    width: 50px;
-    max-width: 50px;
-    min-width: 50px;
-    height: 50px;
-    max-height: 50px;
-    min-height: 50px;
-    margin: 5px;
+    /* min-height: var(--xsize);
+    min-width: var(--xsize); */
+    padding: var(--xpadding);
+    width: var(--xsize);
+    max-width: var(--xsize);
+    min-width: var(--xsize);
+    height: var(--xsize);
+    max-height: var(--xsize);
+    min-height: var(--xsize);
+    margin: var(--xmargin);
     
-    /* line-height: 50px; */
+    /* line-height: var(--xsize); */
   
     background-color: var(--ion-color-dark);
     color: var(--ion-color-light);
     
-    font-size: 28pt;
+    font-size: var(--xfont);
     font-weight: bold;
 
     display: flex;
@@ -114,23 +152,23 @@
     max-width: 100px; */
 
 
-    /* min-height: 50px;
-    min-width: 50px; */
-    padding: 5px;
-    width: 50px;
-    max-width: 50px;
-    min-width: 50px;
-    height: 50px;
-    max-height: 50px;
-    min-height: 50px;
-    margin: 5px;
+    /* min-height: var(--xsize);
+    min-width: var(--xsize); */
+    padding: var(--xpadding);
+    width: var(--xsize);
+    max-width: var(--xsize);
+    min-width: var(--xsize);
+    height: var(--xsize);
+    max-height: var(--xsize);
+    min-height: var(--xsize);
+    margin: var(--xmargin);
     
-    /* line-height: 50px; */
+    /* line-height: var(--xsize); */
   
     background-color: transparent;
     color: var(--ion-color-primary);
     
-    font-size: 28pt;
+    font-size: var(--xfont);
     font-weight: bold;
 
     display: flex;

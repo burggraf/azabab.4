@@ -72,7 +72,7 @@ export default class GriddyService {
     }
 
     public calculateScore = async (board: any) => {
-        console.log('calculateScore: board', board);
+        //console.log('calculateScore: board', board);
         // let score = 0;
         // let successfulWords = [];
         const GRID_SIZE = board[0].length;
@@ -147,7 +147,7 @@ export default class GriddyService {
         if (trial.length !== GRID_SIZE) trial = '';
         trials.push(trial);
         
-        console.log('trials', trials);
+        //console.log('trials', trials);
         
         const foundWords: string[] = [];
         const foundIndexes: number[] = [];
@@ -197,4 +197,67 @@ export default class GriddyService {
     //     });
     // }
 
+    public getPermutations = (arr: string[]) => {
+        // some global variable to store the results
+        const result:string[] = []
+
+        // currentSize should be invoked with the array size
+        function permutation(arr: string[], currentSize: number) {
+            if (currentSize === 1) { // recursion base-case (end)
+                result.push(arr.join(""));
+                return;
+            }
+            
+            for (let i = 0; i < currentSize; i++){
+                permutation(arr, currentSize - 1);
+                if (currentSize % 2 === 1) {
+                    let temp = arr[0];
+                    arr[0] = arr[currentSize - 1];
+                    arr[currentSize - 1] = temp;
+                } else {
+                    let temp = arr[i];
+                    arr[i] = arr[currentSize - 1];
+                    arr[currentSize - 1] = temp;
+                }
+            }
+        }
+
+        permutation(arr, arr.length);
+        return result;
+
+    }
+    public solve = async (choices: string[]) => {
+        // get all possble permutations of choices array
+        const solutions = this.getPermutations(choices);
+        let highScore = 0;
+        let bestBoard = '';
+        const GRID_SIZE = 3;   
+        console.log('going through solutions', solutions.length);
+        solutions.map(async (solutionx: string, index: number) => {
+            const solution = solutionx.split('');   
+            const board: string[][] = [...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill(''))
+            board[0][0] = solution[0];
+            board[0][1] = solution[1];
+            board[0][2] = solution[2];
+            board[1][0] = solution[3];
+            board[1][1] = solution[4];
+            board[1][2] = solution[5];
+            board[2][0] = solution[6];
+            board[2][1] = solution[7];
+            board[2][2] = solution[8];
+            const { data, indexes, error } = await this.calculateScore(board);
+            if (error) {}
+            if (indexes) {}
+            const scr = data.split(', ').length;
+            if (scr > highScore) {
+                highScore = scr;
+                bestBoard = solutionx;
+            }
+            if (index % 1000 === 0) {
+                console.log('solution', index, 'of', solutions.length, 'highScore', highScore, 'bestBoard', bestBoard);
+            }
+        })
+        console.log('highScore', highScore);
+        console.log('bestBoard', bestBoard); 
+    }
 }
