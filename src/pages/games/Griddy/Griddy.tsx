@@ -226,6 +226,8 @@ const Griddy: React.FC = () => {
       </IonHeader>
 
       <IonContent className="">
+      <div className="centeredDiv">
+      <div className="" style={{maxWidth: '375px'}}>
       <div className={`flexcontainer wrap gridsize${GRID_SIZE}`}>
         <IonGrid style={{width: '100%'}}>
             <IonRow key='choices'>
@@ -300,17 +302,21 @@ const Griddy: React.FC = () => {
             </IonRow>
         </IonGrid>
         </div>
-        <div>
-          SCORE: {score}<br/>
-          WORDS: {successfulWords}<br/>
+        <div className="ion-padding">
+          <div>
+            SCORE: {score}<br/>
+            WORDS: {successfulWords}<br/>
+          </div>
+          <div>
+            <br/>
+            GAME NUMBER: {gameNumber}<br/>
+            LOW: {rating.low}<br/>
+            AVG: {rating.avg}<br/>
+            RATING: <b>{rating?.rating}</b><br/>
+            HIGH: {rating.high}<br/><br/>
+          </div>
         </div>
-        <div>
-          <br/>
-          GAME NUMBER: {gameNumber}<br/>
-          LOW: {rating.low}<br/>
-          AVG: {rating.avg}<br/>
-          RATING: <b>{rating?.rating}</b><br/>
-          HIGH: {rating.high}<br/><br/>
+        </div>
         </div>
         {/* <pre>activeChoice: {activeChoice}</pre>
         <pre>board: {JSON.stringify(board)}</pre>
