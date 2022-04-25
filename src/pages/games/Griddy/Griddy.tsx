@@ -1,16 +1,17 @@
-import { IonButtons, IonContent, IonHeader, 
-    IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonMenuButton, IonButton, IonIcon, IonSelect, IonSelectOption } from '@ionic/react';
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
+import { arrowForwardOutline, flashOutline, refreshCircleOutline } from 'ionicons/icons';
 import { useCallback, useEffect, useState } from 'react'
+
 import GriddyService from './griddy.service';
 
 //import { useParams } from 'react-router';
 //import ExploreContainer from '../components/ExploreContainer';
 import './Griddy.css';
-import { arrowForwardOutline, refreshCircleOutline } from 'ionicons/icons';
+
 const griddyService = GriddyService.getInstance();
 let resetting = false;
 let activeChoice = -1;
-
+let reserves: any[] = [];
 const Griddy: React.FC = () => {
   //const GRID_SIZE = 4;
   const [initialized, setInitialized] = useState(false);
@@ -22,6 +23,7 @@ const Griddy: React.FC = () => {
   const [rating,setRating] = useState<any>({rating:0,low:0,high:0,avg:0})
   const [successfulWords,setSuccessfulWords] = useState<string>('')
   const [gameNumber, setGameNumber] = useState<number>(0)
+  const [choiceIsSelected, setChoiceIsSelected] = useState<boolean>(false)
   // const { name } = useParams<{ name: string; }>();
   const clearChoiceBox = (i: number) => {
     const item = document.getElementById(`choice${i}`);
@@ -48,6 +50,7 @@ const Griddy: React.FC = () => {
       activeChoice = i;  
     }
     console.log('activeChoice is now', activeChoice);
+    setChoiceIsSelected(activeChoice !== -1)
   };
 
   const init = useCallback(async () => {
@@ -59,6 +62,7 @@ const Griddy: React.FC = () => {
     const randomSeed = Math.floor(Math.random() * 9999999) + 1;
     setGameNumber(randomSeed);
     const q = griddyService.getRandomQueue(GRID_SIZE, randomSeed);
+    reserves = griddyService.getRandomQueue(GRID_SIZE, randomSeed);
     setChoices(q);
     setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
     activeChoice = -1;
@@ -189,6 +193,12 @@ const Griddy: React.FC = () => {
     // setBoard([...Array(newSize)].map(x=>Array(newSize).fill('')));
     init();
   }
+  const bombChoice = () => {
+    // getRandomLetter  gameNumber
+    const c = [...choices];
+    c[activeChoice] = reserves.shift();
+    setChoices(c);
+  }
   const scoreboxContent = [[],[],[],
     ['southwest','south','south','south','southeast','west','east','west','east','west','east','northeast','north','north','north','northwest'],
     ['southwest','south','south','south','south','southeast','west','east','west','east','west','east','west','east','northeast','north','north','north','north','northwest'],
@@ -241,6 +251,21 @@ const Griddy: React.FC = () => {
                         {choice}
                       </IonCol>
               ))}
+
+              <IonCol 
+                      style={{
+                        color: (choiceIsSelected) ? 'var(--ion-color-primary)' : 'var(--ion-color-medium)',
+                        backgroundColor: 'var(--ion-color-light)',
+                        border:'1px solid var(--ion-color-medium)'}}
+                      key={`bomb`} 
+                      id={`bomb`}
+                      onClick={() => bombChoice()}
+                      className="flex-item">
+                      <IonIcon icon={flashOutline}
+                      className="">
+                      </IonIcon>
+              </IonCol>
+
             </IonRow>
         </IonGrid>
         </div>
@@ -304,6 +329,7 @@ const Griddy: React.FC = () => {
         </div>
         <div className="ion-padding">
           <div>
+            {activeChoice}<br/>
             SCORE: {score}<br/>
             WORDS: {successfulWords}<br/>
           </div>

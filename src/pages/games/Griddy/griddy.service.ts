@@ -1,3 +1,6 @@
+//const supabaseDataService = SupabaseDataService.getInstance();
+import seedrandom from 'seedrandom';
+
 //import * as moment from 'moment';
 //import SupabaseDataService from "../../../services/supabase.data.service";
 import W3 from '../../../data/3.json';
@@ -5,8 +8,6 @@ import W4 from '../../../data/4.json';
 import W5 from '../../../data/5.json';
 import W6 from '../../../data/6.json';
 import LETTERS from '../../../data/letters.json';
-//const supabaseDataService = SupabaseDataService.getInstance();
-import seedrandom from 'seedrandom';
 
 const wordlists = [[], [], [], W3, W4, W5, W6];
 
@@ -31,6 +32,9 @@ export default class GriddyService {
     static supabase: any;
     // constructor() {}
     public getRandomLetter = (GRID_SIZE: number, rng: any) => {
+        if (typeof rng !== 'function') {
+         rng = seedrandom((rng).toString());
+        }
         const r = rng(); // Math.random();
         for (let i=0; i<LETTERS.length; i++) {
             if (r < LETTERS[i].cutoff && LETTERS[i].wordlength === GRID_SIZE) {
