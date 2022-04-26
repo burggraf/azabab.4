@@ -199,12 +199,21 @@ const Griddy: React.FC = () => {
     if (reserves?.length === 0 || activeChoice === -1) {
       return;
     }
+    const letterSquare = document.getElementById(`choice${activeChoice}`);
+    if (letterSquare){
+      letterSquare.classList.toggle('explode');
+    }
     console.log('bombChoice, reserves', reserves);
-    const c = [...choices];
-    const r = [...reserves];
-    c[activeChoice] = r.shift();
-    setChoices(c);
-    setReserves(r);
+    setTimeout(()=> {
+      if (letterSquare){
+        letterSquare.classList.toggle('explode');
+        const c = [...choices];
+        const r = [...reserves];
+        c[activeChoice] = r.shift();
+        setChoices(c);
+        setReserves(r);
+      }  
+    },1000);
   }
   const scoreboxContent = [[],[],[],
     ['southwest','south','south','south','southeast','west','east','west','east','west','east','northeast','north','north','north','northwest'],
