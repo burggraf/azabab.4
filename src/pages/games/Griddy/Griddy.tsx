@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBadge, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
 import { arrowForwardOutline, flashOutline, refreshCircleOutline } from 'ionicons/icons';
 import { useCallback, useEffect, useState } from 'react'
 
@@ -11,9 +11,9 @@ import './Griddy.css';
 const griddyService = GriddyService.getInstance();
 let resetting = false;
 let activeChoice = -1;
-let reserves: any[] = [];
 const Griddy: React.FC = () => {
   //const GRID_SIZE = 4;
+  const [reserves, setReserves] = useState<any[]>([]);
   const [initialized, setInitialized] = useState(false);
   const [GRID_SIZE, setGRID_SIZE] = useState(4);
   const [choices,setChoices] = useState<string[]>([])
@@ -61,8 +61,9 @@ const Griddy: React.FC = () => {
     setInitialized(true);
     const randomSeed = Math.floor(Math.random() * 9999999) + 1;
     setGameNumber(randomSeed);
-    const q = griddyService.getRandomQueue(GRID_SIZE, randomSeed);
-    reserves = griddyService.getRandomQueue(GRID_SIZE, randomSeed);
+    const {q, reserves: rv} = griddyService.getRandomQueue(GRID_SIZE, randomSeed);
+    setReserves(rv);
+    
     setChoices(q);
     setBoard([...Array(GRID_SIZE)].map(x=>Array(GRID_SIZE).fill('')))
     activeChoice = -1;
@@ -195,9 +196,15 @@ const Griddy: React.FC = () => {
   }
   const bombChoice = () => {
     // getRandomLetter  gameNumber
+    if (reserves?.length === 0 || activeChoice === -1) {
+      return;
+    }
+    console.log('bombChoice, reserves', reserves);
     const c = [...choices];
-    c[activeChoice] = reserves.shift();
+    const r = [...reserves];
+    c[activeChoice] = r.shift();
     setChoices(c);
+    setReserves(r);
   }
   const scoreboxContent = [[],[],[],
     ['southwest','south','south','south','southeast','west','east','west','east','west','east','northeast','north','north','north','northwest'],
@@ -254,7 +261,7 @@ const Griddy: React.FC = () => {
 
               <IonCol 
                       style={{
-                        color: (choiceIsSelected) ? 'var(--ion-color-primary)' : 'var(--ion-color-medium)',
+                        color: (choiceIsSelected && reserves?.length) ? 'var(--ion-color-primary)' : 'var(--ion-color-medium)',
                         backgroundColor: 'var(--ion-color-light)',
                         border:'1px solid var(--ion-color-medium)'}}
                       key={`bomb`} 
@@ -329,7 +336,9 @@ const Griddy: React.FC = () => {
         </div>
         <div className="ion-padding">
           <div>
-            {activeChoice}<br/>
+            BOMBS LEFT:  <IonBadge 
+                        color="danger">{reserves?.length}</IonBadge><br/>
+
             SCORE: {score}<br/>
             WORDS: {successfulWords}<br/>
           </div>

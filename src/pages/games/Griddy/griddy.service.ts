@@ -32,9 +32,6 @@ export default class GriddyService {
     static supabase: any;
     // constructor() {}
     public getRandomLetter = (GRID_SIZE: number, rng: any) => {
-        if (typeof rng !== 'function') {
-         rng = seedrandom((rng).toString());
-        }
         const r = rng(); // Math.random();
         for (let i=0; i<LETTERS.length; i++) {
             if (r < LETTERS[i].cutoff && LETTERS[i].wordlength === GRID_SIZE) {
@@ -71,8 +68,12 @@ export default class GriddyService {
         for (let i=0; i < (GRID_SIZE * GRID_SIZE); i++) {
           q.push(this.getRandomLetter(GRID_SIZE, rng))
         }
+        const reserves = [];
+        for (let i=0; i < (GRID_SIZE * GRID_SIZE); i++) {
+            reserves.push(this.getRandomLetter(GRID_SIZE, rng))
+        }
         //console.log('rating', this.rateQueue(q, GRID_SIZE));
-        return q;
+        return {q, reserves};
     }
 
     public calculateScore = async (board: any) => {
