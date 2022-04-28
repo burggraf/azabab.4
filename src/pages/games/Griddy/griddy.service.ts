@@ -59,8 +59,28 @@ export default class GriddyService {
             }
             return null
         });
-        const scale = GriddyService.ratingScale[GRID_SIZE];        
-        return {rating, low: scale.low, avg: scale.avg, high: scale.high};
+        const scale = GriddyService.ratingScale[GRID_SIZE];  
+
+        const letterTally: any = {A:0,B:0,C:0,D:0,E:0,F:0,G:0,H:0,I:0,J:0,K:0,L:0,M:0,N:0,O:0,P:0,Q:0,R:0,S:0,T:0,U:0,V:0,W:0,X:0,Y:0,Z:0};
+        q.map((letter: string) => {
+            letterTally[letter] += 1;
+            return null;
+        })        
+        let delta = 0.0;
+        let q_delta = 0.0;
+        let index = 0;
+        for (let l in letterTally) {
+            const actual = letterTally[l] / q.length;
+            const target = LETTERS[index].pct;
+            console.log(`${l}: ${actual} ${target}`);
+            delta += Math.abs(actual - target);
+            if (letterTally[l] > 0) {
+                q_delta += Math.abs(actual - target);
+            }
+            index++;
+        }
+        console.log('delta', delta);
+        return {delta, q_delta, rating, low: scale.low, avg: scale.avg, high: scale.high};
     }
     public getRandomQueue = (GRID_SIZE: number, seed: number) => {
         const rng = seedrandom((seed).toString());

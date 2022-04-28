@@ -358,7 +358,10 @@ const Griddy: React.FC = () => {
             LOW: {rating.low}<br/>
             AVG: {rating.avg}<br/>
             RATING: <b>{rating?.rating}</b><br/>
+            DELTA: <b>{rating.delta}</b><br/>
+            Q_DELTA: <b>{rating.q_delta}</b><br/>
             HIGH: {rating.high}<br/><br/>
+            <div onClick={() => { griddyService.getLetterDisributions();}}>getLetterDisributions</div>
           </div>
         </div>
         </div>
