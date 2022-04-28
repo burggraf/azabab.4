@@ -1,5 +1,5 @@
 import { IonBadge, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
-import { arrowForwardOutline, flashOutline, refreshCircleOutline } from 'ionicons/icons';
+import { arrowForwardOutline, refreshCircleOutline } from 'ionicons/icons';
 import { useCallback, useEffect, useState } from 'react'
 
 import GriddyService from './griddy.service';
@@ -277,7 +277,7 @@ const Griddy: React.FC = () => {
                       id={`bomb`}
                       onClick={() => bombChoice()}
                       className="flex-item">
-                      <IonIcon icon={flashOutline}
+                      <IonIcon src="/assets/svg-icons/bomb.svg"
                       className="">
                       </IonIcon>
               </IonCol>
