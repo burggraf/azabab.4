@@ -343,6 +343,7 @@ const Griddy: React.FC = () => {
             </IonRow>
         </IonGrid>
         </div>
+        Deck: <div className={`reserves wrap gridsize${GRID_SIZE}`}>{reserves.join(' ')}</div>
         <div className="ion-padding">
           <div>
             BOMBS LEFT:  <IonBadge 

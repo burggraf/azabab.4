@@ -184,7 +184,9 @@
     justify-content: center; /* Horizontal center alignment */
 
 }
-
+.reserves {
+    font-size: var(--xfont);
+}
 .centeredDiv {
     display: flex;
     justify-content: center; /* Horizontal center alignment */
