@@ -277,9 +277,10 @@ const Griddy: React.FC = () => {
                       id={`bomb`}
                       onClick={() => bombChoice()}
                       className="flex-item">
-                      <IonIcon src="/assets/svg-icons/bomb.svg"
+                      <IonIcon src="/assets/svg-icons/bomb.svg" size="large"
                       className="">
                       </IonIcon>
+                      <span className={`bomb${GRID_SIZE}`} style={{color:(choiceIsSelected && reserves?.length) ? 'var(--ion-color-dark)' : 'var(--ion-color-medium)'}}>{reserves?.length}</span>
               </IonCol>
 
             </IonRow>

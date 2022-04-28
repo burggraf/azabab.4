@@ -43,7 +43,30 @@
     --xsize: 35px;
     --xfont: 20pt;    
 }
-
+.bomb3 {
+    position: absolute;
+    bottom: 0%;
+    right: 8%;
+    font-size: 16pt;     
+}
+.bomb4 {
+    position: absolute;
+    bottom: 0%;
+    right: 2%;
+    font-size: 11pt;     
+}
+.bomb5 {
+    position: absolute;
+    top: 0%;
+    left: 2%;
+    font-size: 10pt;     
+}
+.bomb6 {
+    position: absolute;
+    top: 0%;
+    left: 2%;
+    font-size: 8pt;     
+}
 .west {
     transform: rotate(0deg);    
 }
