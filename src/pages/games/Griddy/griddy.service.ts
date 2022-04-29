@@ -88,6 +88,7 @@ export default class GriddyService {
             if (item.wordlength === GRID_SIZE && 'AEIOU'.indexOf(item.letter) > -1) {
                 vowelAvg += item.pct;
             }
+            return null;
         })
         vowelAvg = vowelAvg * q.length;
         return {delta, q_delta, rating, 
