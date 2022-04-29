@@ -358,7 +358,7 @@ const Griddy: React.FC = () => {
             AVG: {rating.avg}<br/>
             HIGH: {rating.high}<br/>
             Rack Balance<br/>
-            Vowels: <b>{rating.q_vowels}</b> (avg {rating.vowelAvg.toFixed(2)})<br/>
+            Vowels: <b>{rating.q_vowels}</b> (avg {rating?.vowelAvg?.toFixed(2)})<br/>
 
             DELTA: <b>{rating.delta}</b><br/>
             Q_DELTA: <b>{rating.q_delta}</b><br/>
