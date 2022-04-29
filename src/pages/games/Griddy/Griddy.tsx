@@ -1,4 +1,4 @@
-import { IonBadge, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonMenuButton, IonPage, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
 import { arrowForwardOutline, refreshCircleOutline } from 'ionicons/icons';
 import { useCallback, useEffect, useState } from 'react'
 
@@ -347,21 +347,22 @@ const Griddy: React.FC = () => {
         Deck: <div className={`reserves wrap gridsize${GRID_SIZE}`}>{reserves.join(' ')}</div>
         <div className="ion-padding">
           <div>
-            BOMBS LEFT:  <IonBadge 
-                        color="danger">{reserves?.length}</IonBadge><br/>
-
             SCORE: {score}<br/>
             WORDS: {successfulWords}<br/>
           </div>
           <div>
             <br/>
             GAME NUMBER: {gameNumber}<br/>
+            RATING: <b>{rating?.rating}</b><br/>
             LOW: {rating.low}<br/>
             AVG: {rating.avg}<br/>
-            HIGH: {rating.high}<br/><br/>
-            RATING: <b>{rating?.rating}</b><br/>
+            HIGH: {rating.high}<br/>
+            Rack Balance<br/>
+            Vowels: <b>{rating.q_vowels}</b> (avg {rating.vowelAvg.toFixed(2)})<br/>
+
             DELTA: <b>{rating.delta}</b><br/>
             Q_DELTA: <b>{rating.q_delta}</b><br/>
+
           </div>
         </div>
         </div>

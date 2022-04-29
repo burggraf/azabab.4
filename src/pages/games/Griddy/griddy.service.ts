@@ -43,6 +43,7 @@ export default class GriddyService {
     public rateQueue = (q: string[], GRID_SIZE: number) => {
         const words = wordlists[GRID_SIZE];
         let rating = 0;
+        let q_vowels = 0;
         words.map((word: string) => {
             const qq = [...q];
             let found = true;
@@ -64,6 +65,7 @@ export default class GriddyService {
         const letterTally: any = {A:0,B:0,C:0,D:0,E:0,F:0,G:0,H:0,I:0,J:0,K:0,L:0,M:0,N:0,O:0,P:0,Q:0,R:0,S:0,T:0,U:0,V:0,W:0,X:0,Y:0,Z:0};
         q.map((letter: string) => {
             letterTally[letter] += 1;
+            if ('AEIOU'.indexOf(letter) !== -1) { q_vowels++; }
             return null;
         })        
         let delta = 0.0;
@@ -80,7 +82,17 @@ export default class GriddyService {
             index++;
         }
         console.log('delta', delta);
-        return {delta, q_delta, rating, low: scale.low, avg: scale.avg, high: scale.high};
+        // get vowel count
+        let vowelAvg = 0.0
+        LETTERS.map((item: any) => {
+            if (item.wordlength === GRID_SIZE && 'AEIOU'.indexOf(item.letter) > -1) {
+                vowelAvg += item.pct;
+            }
+        })
+        vowelAvg = vowelAvg * q.length;
+        return {delta, q_delta, rating, 
+            low: scale.low, avg: scale.avg, 
+            high: scale.high, vowelAvg, q_vowels};
     }
     public getRandomQueue = (GRID_SIZE: number, seed: number) => {
         const rng = seedrandom((seed).toString());
