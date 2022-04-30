@@ -43,6 +43,8 @@ export default class GriddyService {
     public rateQueue = (q: string[], GRID_SIZE: number) => {
         const words = wordlists[GRID_SIZE];
         let rating = 0;
+        let palindromes = 0;
+        const palindromeList: string[] = [];
         let q_vowels = 0;
         words.map((word: string) => {
             const qq = [...q];
@@ -56,7 +58,13 @@ export default class GriddyService {
                 }
             }
             if (found) {
-                rating += 1;
+                // reverse the word and check again
+                const rev = word.split('').reverse().join('');
+                if (words.indexOf(rev) > -1) {  
+                    palindromes++;
+                    palindromeList.push(word);
+                }            
+                rating++;
             }
             return null
         });
@@ -93,7 +101,7 @@ export default class GriddyService {
         vowelAvg = vowelAvg * q.length;
         return {delta, q_delta, rating, 
             low: scale.low, avg: scale.avg, 
-            high: scale.high, vowelAvg, q_vowels};
+            high: scale.high, vowelAvg, q_vowels, palindromes, palindromeList};
     }
     public getRandomQueue = (GRID_SIZE: number, seed: number) => {
         const rng = seedrandom((seed).toString());

@@ -353,7 +353,7 @@ const Griddy: React.FC = () => {
           <div>
             <br/>
             GAME NUMBER: {gameNumber}<br/>
-            RATING: <b>{rating?.rating}</b><br/>
+            RATING: <b>{rating?.rating} (+{rating?.palindromes})</b><br/>
             LOW: {rating.low}<br/>
             AVG: {rating.avg}<br/>
             HIGH: {rating.high}<br/>
@@ -362,6 +362,7 @@ const Griddy: React.FC = () => {
 
             DELTA: <b>{rating.delta}</b><br/>
             Q_DELTA: <b>{rating.q_delta}</b><br/>
+            pal: <b>{(rating?.palindromeList as string[] || '').join(', ')}</b><br/>
 
           </div>
         </div>
