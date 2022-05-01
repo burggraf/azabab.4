@@ -362,7 +362,7 @@ const Griddy: React.FC = () => {
 
             DELTA: <b>{rating.delta}</b><br/>
             Q_DELTA: <b>{rating.q_delta}</b><br/>
-            pal: <b>{(rating?.palindromeList as string[] || '').join(', ')}</b><br/>
+            pal: <b>{((rating?.palindromeList) ? (rating?.palindromeList as string[] || '').join(', ') : '')}</b><br/>
 
           </div>
         </div>
